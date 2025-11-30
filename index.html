@@ -91,7 +91,7 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      margin: 16px 0 24px;
+      margin: 16px 0 10px;
     }
 
     .logo-icon {
@@ -134,6 +134,27 @@
       text-transform: lowercase;
     }
 
+    .nav-links {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--green-dark);
+      font-weight: 700;
+      font-size: 13px;
+      padding: 8px 12px;
+      background: rgba(34, 197, 94, 0.1);
+      border-radius: 999px;
+      border: 1px solid rgba(21, 128, 61, 0.12);
+      transition: transform 140ms ease, box-shadow 140ms ease;
+      box-shadow: 0 10px 18px rgba(0, 0, 0, 0.04);
+    }
+    .nav-links a:hover { transform: translateY(-1px); box-shadow: 0 12px 20px rgba(0,0,0,0.08); }
+
     .intro {
       text-align: center;
       color: #1f2937;
@@ -159,10 +180,11 @@
     .card {
       background: var(--white);
       border-radius: 18px;
-      padding: 16px 14px 14px;
+      padding: 10px 14px 14px;
       box-shadow: var(--shadow);
       border: 1px solid rgba(21, 128, 61, 0.06);
       transition: transform 140ms ease, box-shadow 140ms ease;
+      touch-action: manipulation;
     }
 
     .card:hover, .card:focus-within {
@@ -170,14 +192,48 @@
       box-shadow: 0 16px 34px rgba(0, 0, 0, 0.1);
     }
 
-    .card h3 {
-      margin: 0 0 9px;
-      font-size: clamp(16px, 4vw, 18px);
-      color: var(--green-dark);
+    .card-toggle {
+      width: 100%;
+      border: none;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 4px 10px;
+      cursor: pointer;
+      gap: 10px;
+      border-radius: 12px;
+    }
+
+    .card-title {
       display: inline-flex;
       align-items: center;
       gap: 8px;
+      font-size: clamp(16px, 4vw, 18px);
+      color: var(--green-dark);
+      font-weight: 700;
     }
+
+    .caret {
+      font-size: 18px;
+      color: var(--green-dark);
+      transition: transform 140ms ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+    }
+
+    .card.collapsed .caret { transform: rotate(-90deg); }
+
+    .card-body {
+      display: grid;
+      gap: 0;
+      padding-top: 4px;
+    }
+
+    .card.collapsed .card-body { display: none; }
 
     .pill {
       display: inline-block;
@@ -238,6 +294,19 @@
     .footer .slogan {
       font-size: 13px;
       letter-spacing: 0.2px;
+      text-align: center;
+    }
+
+    .footer-social {
+      display: grid;
+      gap: 8px;
+      justify-items: center;
+    }
+    .footer-social h4 {
+      margin: 0;
+      font-size: 13px;
+      letter-spacing: 0.3px;
+      color: #d5f0dd;
     }
 
     .social {
@@ -247,8 +316,8 @@
     }
 
     .social a {
-      width: 36px;
-      height: 36px;
+      width: 38px;
+      height: 38px;
       border-radius: 50%;
       display: grid;
       place-items: center;
@@ -263,10 +332,14 @@
     .social a:hover { transform: translateY(-1px) scale(1.03); background: rgba(255, 255, 255, 0.18); }
 
     @media (max-width: 480px) {
-      .page { padding: 20px 14px 72px; }
-      .brand { margin: 14px 0 20px; }
-      .card { padding: 15px 13px 13px; }
+      .page { padding: 18px 12px 70px; }
+      .brand { margin: 12px 0 18px; }
+      .card { padding: 12px 12px 12px; }
+      .card-toggle { padding: 12px 4px; }
+      .card-title { font-size: 16px; }
       .footer { padding: 14px; }
+      .intro-visual { height: 72vh; border-radius: 22px; }
+      .intro-btn { width: 90%; }
     }
 
     /* AI öneri alanı */
@@ -449,6 +522,27 @@
       letter-spacing: 0.2px;
       opacity: 0.9;
     }
+    .intro-links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      z-index: 2;
+      position: relative;
+    }
+    .intro-link {
+      text-decoration: none;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(21, 128, 61, 0.2);
+      color: var(--green-dark);
+      background: rgba(255, 255, 255, 0.88);
+      font-weight: 700;
+      font-size: 13px;
+      box-shadow: 0 10px 18px rgba(0, 0, 0, 0.05);
+      transition: transform 140ms ease, box-shadow 140ms ease;
+    }
+    .intro-link:hover { transform: translateY(-1px); box-shadow: 0 12px 22px rgba(0, 0, 0, 0.08); }
     .intro-btn {
       background: linear-gradient(135deg, var(--green), var(--green-dark));
       color: var(--white);
@@ -480,6 +574,105 @@
       to { transform: translateY(-6px) scale(1.02); }
     }
 
+    /* Bilgi blokları */
+    .info-section {
+      background: rgba(21, 128, 61, 0.05);
+      border: 1px solid rgba(21, 128, 61, 0.08);
+      border-radius: 18px;
+      padding: 18px 16px;
+      margin-top: 18px;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
+    }
+    .info-section h2 {
+      margin: 0 0 10px;
+      font-size: 18px;
+      color: var(--green-dark);
+      letter-spacing: 0.2px;
+      text-align: center;
+    }
+    .info-section p {
+      margin: 0;
+      font-size: 14px;
+      color: #1f2937;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    .hours-card {
+      display: grid;
+      gap: 8px;
+      background: var(--white);
+      border: 1px solid rgba(21, 128, 61, 0.08);
+      border-radius: 14px;
+      padding: 12px;
+      margin-top: 10px;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.05);
+      max-width: 420px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .hours-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      color: #0f172a;
+      gap: 8px;
+    }
+    .hours-row strong { color: var(--green-dark); font-weight: 800; }
+
+    .contact-grid {
+      display: grid;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .contact-item {
+      display: grid;
+      grid-template-columns: 36px 1fr;
+      align-items: center;
+      gap: 10px;
+      background: var(--white);
+      border: 1px solid rgba(21, 128, 61, 0.08);
+      border-radius: 12px;
+      padding: 10px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+    }
+    .contact-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      background: rgba(34, 197, 94, 0.14);
+      display: grid;
+      place-items: center;
+      color: var(--green-dark);
+      font-weight: 800;
+      font-size: 12px;
+    }
+    .contact-text {
+      display: grid;
+      gap: 2px;
+      font-size: 13px;
+      color: #1f2937;
+    }
+    .contact-text strong { color: var(--green-dark); font-size: 13px; }
+
+    .map-btn {
+      margin-top: 8px;
+      background: linear-gradient(135deg, var(--green), var(--green-dark));
+      color: var(--white);
+      border: none;
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      box-shadow: 0 12px 20px rgba(21, 128, 61, 0.22);
+      transition: transform 120ms ease, box-shadow 120ms ease;
+      width: fit-content;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .map-btn:active { transform: translateY(1px); box-shadow: 0 10px 16px rgba(21, 128, 61, 0.2); }
   </style>
 </head>
 <body>
@@ -497,6 +690,10 @@
         </div>
         <div class="intro-brand">Green Light Cafe</div>
         <div class="intro-sub">Ferah, yeşil ve ışık dolu seçimler.</div>
+        <div class="intro-links">
+          <a class="intro-link" href="#hakkimizda">Hakkımızda</a>
+          <a class="intro-link" href="#iletisim">İletişim</a>
+        </div>
       </div>
       <button class="intro-btn" id="startMenu">Menüyü Gör</button>
     </div>
@@ -509,6 +706,10 @@
       <div class="logo-icon" aria-hidden="true"></div>
       <div class="brand-name">Green Light Cafe</div>
     </div>
+    <nav class="nav-links" aria-label="Ana menü">
+      <a href="#hakkimizda">Hakkımızda</a>
+      <a href="#iletisim">İletişim</a>
+    </nav>
 
     <p class="intro">
       Doğaya saygılı, ferah ve ışık dolu lezzetler. QR menümüzden sürdürülebilir seçimleri keşfedin.
@@ -539,315 +740,406 @@
     </section>
 
     <section class="menu">
-      <article class="card">
-        <h3><span class="pill"></span>Kahvaltı</h3>
-        <div class="item">
-          <div class="item-title">
-            <span>Kahvaltı Tabağı</span><span class="price">200 TL</span>
+      <article class="card collapsed">
+        <button class="card-toggle" type="button">
+          <span class="card-title"><span class="pill"></span>Kahvaltı</span>
+          <span class="caret">⌄</span>
+        </button>
+        <div class="card-body">
+          <div class="item">
+            <div class="item-title">
+              <span>Kahvaltı Tabağı</span><span class="price">200 TL</span>
+            </div>
+            <p class="desc">Sınırsız çay ile.</p>
           </div>
-          <p class="desc">Sınırsız çay ile.</p>
-        </div>
-        <div class="item">
-          <div class="item-title">
-            <span>Simit Tabağı</span><span class="price">110 TL</span>
+          <div class="item">
+            <div class="item-title">
+              <span>Simit Tabağı</span><span class="price">110 TL</span>
+            </div>
+            <p class="desc">1 fincan çay dahil.</p>
           </div>
-          <p class="desc">1 fincan çay dahil.</p>
-        </div>
-        <div class="item">
-          <div class="item-title">
-            <span>Menemen</span><span class="price">100 TL</span>
+          <div class="item">
+            <div class="item-title">
+              <span>Menemen</span><span class="price">100 TL</span>
+            </div>
+            <p class="desc">1 fincan çay ile.</p>
           </div>
-          <p class="desc">1 fincan çay ile.</p>
-        </div>
-        <div class="item">
-          <div class="item-title">
-            <span>Sade Omlet</span><span class="price">50 TL</span>
+          <div class="item">
+            <div class="item-title">
+              <span>Sade Omlet</span><span class="price">50 TL</span>
+            </div>
+            <p class="desc"></p>
           </div>
-          <p class="desc"></p>
-        </div>
-        <div class="item">
-          <div class="item-title">
-            <span>Kaşarlı - Beyaz Peynirli Omlet</span><span class="price">75 TL</span>
+          <div class="item">
+            <div class="item-title">
+              <span>Kaşarlı - Beyaz Peynirli Omlet</span><span class="price">75 TL</span>
+            </div>
+            <p class="desc"></p>
           </div>
-          <p class="desc"></p>
-        </div>
-        <div class="item">
-          <div class="item-title">
-            <span>Sebzeli - Kaşarlı Omlet</span><span class="price">75 TL</span>
+          <div class="item">
+            <div class="item-title">
+              <span>Sebzeli - Kaşarlı Omlet</span><span class="price">75 TL</span>
+            </div>
+            <p class="desc"></p>
           </div>
-          <p class="desc"></p>
-        </div>
-        <div class="item">
-          <div class="item-title">
-            <span>Sucuklu Yumurta</span><span class="price">140 TL</span>
+          <div class="item">
+            <div class="item-title">
+              <span>Sucuklu Yumurta</span><span class="price">140 TL</span>
+            </div>
+            <p class="desc"></p>
           </div>
-          <p class="desc"></p>
-        </div>
-        <div class="item">
-          <div class="item-title">
-            <span>Sahanda Sucuk</span><span class="price">120 TL</span>
+          <div class="item">
+            <div class="item-title">
+              <span>Sahanda Sucuk</span><span class="price">120 TL</span>
+            </div>
+            <p class="desc"></p>
           </div>
-          <p class="desc"></p>
-        </div>
-        <div class="item">
-          <div class="item-title">
-            <span>Sigara Böreği</span><span class="price">70 TL</span>
+          <div class="item">
+            <div class="item-title">
+              <span>Sigara Böreği</span><span class="price">70 TL</span>
+            </div>
+            <p class="desc"></p>
           </div>
-          <p class="desc"></p>
-        </div>
-      </article>
-
-      <article class="card">
-        <h3><span class="pill"></span>Atıştırmalık</h3>
-        <div class="item">
-          <div class="item-title">
-            <span>Çıtır Sepet</span><span class="price">180 TL</span>
-          </div>
-          <p class="desc"></p>
-        </div>
-        <div class="item">
-          <div class="item-title">
-            <span>Patates Kızartması (K)</span><span class="price">60 TL</span>
-          </div>
-          <p class="desc">Küçük boy.</p>
-        </div>
-        <div class="item">
-          <div class="item-title">
-            <span>Patates Kızartması (O)</span><span class="price">85 TL</span>
-          </div>
-          <p class="desc">Orta boy.</p>
-        </div>
-        <div class="item">
-          <div class="item-title">
-            <span>Patates Kızartması (B)</span><span class="price">120 TL</span>
-          </div>
-          <p class="desc">Büyük boy.</p>
-        </div>
-        <div class="item">
-          <div class="item-title">
-            <span>Hamburger</span><span class="price">220 TL</span>
-          </div>
-          <p class="desc"></p>
-        </div>
-        <div class="item">
-          <div class="item-title">
-            <span>Cheeseburger</span><span class="price">240 TL</span>
-          </div>
-          <p class="desc"></p>
-        </div>
-        <div class="item">
-          <div class="item-title">
-            <span>Tavuk Schnitzel</span><span class="price">250 TL</span>
-          </div>
-          <p class="desc"></p>
-        </div>
-        <div class="item">
-          <div class="item-title">
-            <span>Tavuk Wrap</span><span class="price">230 TL</span>
-          </div>
-          <p class="desc"></p>
         </div>
       </article>
 
-      <article class="card">
-        <h3><span class="pill"></span>Tostlar</h3>
-        <div class="item">
-          <div class="item-title">
-            <span>Kaşarlı Tost</span><span class="price">110 TL</span>
+      <article class="card collapsed">
+        <button class="card-toggle" type="button">
+          <span class="card-title"><span class="pill"></span>Atıştırmalık</span>
+          <span class="caret">⌄</span>
+        </button>
+        <div class="card-body">
+          <div class="item">
+            <div class="item-title">
+              <span>Çıtır Sepet</span><span class="price">180 TL</span>
+            </div>
+            <p class="desc"></p>
           </div>
-          <p class="desc"></p>
-        </div>
-        <div class="item">
-          <div class="item-title">
-            <span>Karışık Tost</span><span class="price">140 TL</span>
+          <div class="item">
+            <div class="item-title">
+              <span>Patates Kızartması (K)</span><span class="price">60 TL</span>
+            </div>
+            <p class="desc">Küçük boy.</p>
           </div>
-          <p class="desc"></p>
-        </div>
-        <div class="item">
-          <div class="item-title">
-            <span>Sucuklu Tost</span><span class="price">120 TL</span>
+          <div class="item">
+            <div class="item-title">
+              <span>Patates Kızartması (O)</span><span class="price">85 TL</span>
+            </div>
+            <p class="desc">Orta boy.</p>
           </div>
-          <p class="desc"></p>
-        </div>
-        <div class="item">
-          <div class="item-title">
-            <span>Bazlama Tost</span><span class="price">150 TL</span>
+          <div class="item">
+            <div class="item-title">
+              <span>Patates Kızartması (B)</span><span class="price">120 TL</span>
+            </div>
+            <p class="desc">Büyük boy.</p>
           </div>
-          <p class="desc"></p>
-        </div>
-        <div class="item">
-          <div class="item-title">
-            <span>Pesto Soslu Tost</span><span class="price">120 TL</span>
+          <div class="item">
+            <div class="item-title">
+              <span>Hamburger</span><span class="price">220 TL</span>
+            </div>
+            <p class="desc"></p>
           </div>
-          <p class="desc"></p>
-        </div>
-      </article>
-
-      <article class="card">
-        <h3><span class="pill"></span>Gözlemeler</h3>
-        <div class="item">
-          <div class="item-title">
-            <span>Kaşarlı Gözleme</span><span class="price">110 TL</span>
+          <div class="item">
+            <div class="item-title">
+              <span>Cheeseburger</span><span class="price">240 TL</span>
+            </div>
+            <p class="desc"></p>
           </div>
-          <p class="desc"></p>
-        </div>
-        <div class="item">
-          <div class="item-title">
-            <span>Patates + Kaşarlı Gözleme</span><span class="price">130 TL</span>
+          <div class="item">
+            <div class="item-title">
+              <span>Tavuk Schnitzel</span><span class="price">250 TL</span>
+            </div>
+            <p class="desc"></p>
           </div>
-          <p class="desc"></p>
-        </div>
-        <div class="item">
-          <div class="item-title">
-            <span>Ispanak + Kaşarlı Gözleme</span><span class="price">130 TL</span>
+          <div class="item">
+            <div class="item-title">
+              <span>Tavuk Wrap</span><span class="price">230 TL</span>
+            </div>
+            <p class="desc"></p>
           </div>
-          <p class="desc"></p>
-        </div>
-        <div class="item">
-          <div class="item-title">
-            <span>Mantar + Kaşarlı Gözleme</span><span class="price">130 TL</span>
-          </div>
-          <p class="desc"></p>
-        </div>
-        <div class="item">
-          <div class="item-title">
-            <span>Sucuk + Kaşarlı Gözleme</span><span class="price">170 TL</span>
-          </div>
-          <p class="desc"></p>
-        </div>
-        <div class="item">
-          <div class="item-title">
-            <span>Pizza Gözleme</span><span class="price">200 TL</span>
-          </div>
-          <p class="desc"></p>
         </div>
       </article>
 
-      <article class="card">
-        <h3><span class="pill"></span>Makarnalar</h3>
-        <div class="item">
-          <div class="item-title">
-            <span>Körü Soslu Makarna</span><span class="price">250 TL</span>
+      <article class="card collapsed">
+        <button class="card-toggle" type="button">
+          <span class="card-title"><span class="pill"></span>Tostlar</span>
+          <span class="caret">⌄</span>
+        </button>
+        <div class="card-body">
+          <div class="item">
+            <div class="item-title">
+              <span>Kaşarlı Tost</span><span class="price">110 TL</span>
+            </div>
+            <p class="desc"></p>
           </div>
-          <p class="desc"></p>
-        </div>
-        <div class="item">
-          <div class="item-title">
-            <span>Fettuccine Makarna</span><span class="price">250 TL</span>
+          <div class="item">
+            <div class="item-title">
+              <span>Karışık Tost</span><span class="price">140 TL</span>
+            </div>
+            <p class="desc"></p>
           </div>
-          <p class="desc"></p>
-        </div>
-        <div class="item">
-          <div class="item-title">
-            <span>Kremalı Mantarlı Makarna</span><span class="price">230 TL</span>
+          <div class="item">
+            <div class="item-title">
+              <span>Sucuklu Tost</span><span class="price">120 TL</span>
+            </div>
+            <p class="desc"></p>
           </div>
-          <p class="desc"></p>
-        </div>
-      </article>
-
-      <article class="card">
-        <h3><span class="pill"></span>Anne Eli</h3>
-        <div class="item">
-          <div class="item-title">
-            <span>İçli Köfte (Kıyma + Ceviz)</span><span class="price">240 TL</span>
+          <div class="item">
+            <div class="item-title">
+              <span>Bazlama Tost</span><span class="price">150 TL</span>
+            </div>
+            <p class="desc"></p>
           </div>
-          <p class="desc"></p>
-        </div>
-        <div class="item">
-          <div class="item-title">
-            <span>İçli Köfte (Patatesli)</span><span class="price">160 TL</span>
+          <div class="item">
+            <div class="item-title">
+              <span>Pesto Soslu Tost</span><span class="price">120 TL</span>
+            </div>
+            <p class="desc"></p>
           </div>
-          <p class="desc"></p>
-        </div>
-        <div class="item">
-          <div class="item-title">
-            <span>Yaprak Sarma</span><span class="price">200 TL</span>
-          </div>
-          <p class="desc"></p>
-        </div>
-        <div class="item">
-          <div class="item-title">
-            <span>Mantı (Kıymalı)</span><span class="price">250 TL</span>
-          </div>
-          <p class="desc"></p>
         </div>
       </article>
 
-      <article class="card">
-        <h3><span class="pill"></span>Salatalar</h3>
-        <div class="item">
-          <div class="item-title">
-            <span>Ton Balıklı Salata</span><span class="price">200 TL</span>
+      <article class="card collapsed">
+        <button class="card-toggle" type="button">
+          <span class="card-title"><span class="pill"></span>Gözlemeler</span>
+          <span class="caret">⌄</span>
+        </button>
+        <div class="card-body">
+          <div class="item">
+            <div class="item-title">
+              <span>Kaşarlı Gözleme</span><span class="price">110 TL</span>
+            </div>
+            <p class="desc"></p>
           </div>
-          <p class="desc"></p>
-        </div>
-        <div class="item">
-          <div class="item-title">
-            <span>Sezar Salata</span><span class="price">200 TL</span>
+          <div class="item">
+            <div class="item-title">
+              <span>Patates + Kaşarlı Gözleme</span><span class="price">130 TL</span>
+            </div>
+            <p class="desc"></p>
           </div>
-          <p class="desc"></p>
-        </div>
-        <div class="item">
-          <div class="item-title">
-            <span>Hellim Peynirli Salata</span><span class="price">160 TL</span>
+          <div class="item">
+            <div class="item-title">
+              <span>Ispanak + Kaşarlı Gözleme</span><span class="price">130 TL</span>
+            </div>
+            <p class="desc"></p>
           </div>
-          <p class="desc"></p>
+          <div class="item">
+            <div class="item-title">
+              <span>Mantar + Kaşarlı Gözleme</span><span class="price">130 TL</span>
+            </div>
+            <p class="desc"></p>
+          </div>
+          <div class="item">
+            <div class="item-title">
+              <span>Sucuk + Kaşarlı Gözleme</span><span class="price">170 TL</span>
+            </div>
+            <p class="desc"></p>
+          </div>
+          <div class="item">
+            <div class="item-title">
+              <span>Pizza Gözleme</span><span class="price">200 TL</span>
+            </div>
+            <p class="desc"></p>
+          </div>
         </div>
       </article>
 
-      <article class="card">
-        <h3><span class="pill"></span>Tatlılar</h3>
-        <div class="item">
-          <div class="item-title">
-            <span>Tiramisu</span><span class="price">150 TL</span>
+      <article class="card collapsed">
+        <button class="card-toggle" type="button">
+          <span class="card-title"><span class="pill"></span>Makarnalar</span>
+          <span class="caret">⌄</span>
+        </button>
+        <div class="card-body">
+          <div class="item">
+            <div class="item-title">
+              <span>Körü Soslu Makarna</span><span class="price">250 TL</span>
+            </div>
+            <p class="desc"></p>
           </div>
-          <p class="desc"></p>
-        </div>
-        <div class="item">
-          <div class="item-title">
-            <span>San Sebastian</span><span class="price">170 TL</span>
+          <div class="item">
+            <div class="item-title">
+              <span>Fettuccine Makarna</span><span class="price">250 TL</span>
+            </div>
+            <p class="desc"></p>
           </div>
-          <p class="desc"></p>
-        </div>
-        <div class="item">
-          <div class="item-title">
-            <span>Cheesecake</span><span class="price">170 TL</span>
+          <div class="item">
+            <div class="item-title">
+              <span>Kremalı Mantarlı Makarna</span><span class="price">230 TL</span>
+            </div>
+            <p class="desc"></p>
           </div>
-          <p class="desc"></p>
-        </div>
-        <div class="item">
-          <div class="item-title">
-            <span>Magnolia</span><span class="price">170 TL</span>
-          </div>
-          <p class="desc"></p>
-        </div>
-        <div class="item">
-          <div class="item-title">
-            <span>Fransız Ekler</span><span class="price">150 TL</span>
-          </div>
-          <p class="desc"></p>
-        </div>
-        <div class="item">
-          <div class="item-title">
-            <span>Ajda</span><span class="price">180 TL</span>
-          </div>
-          <p class="desc"></p>
-        </div>
-        <div class="item">
-          <div class="item-title">
-            <span>Trileçe</span><span class="price">150 TL</span>
-          </div>
-          <p class="desc"></p>
         </div>
       </article>
+
+      <article class="card collapsed">
+        <button class="card-toggle" type="button">
+          <span class="card-title"><span class="pill"></span>Anne Eli</span>
+          <span class="caret">⌄</span>
+        </button>
+        <div class="card-body">
+          <div class="item">
+            <div class="item-title">
+              <span>İçli Köfte (Kıyma + Ceviz)</span><span class="price">240 TL</span>
+            </div>
+            <p class="desc"></p>
+          </div>
+          <div class="item">
+            <div class="item-title">
+              <span>İçli Köfte (Patatesli)</span><span class="price">160 TL</span>
+            </div>
+            <p class="desc"></p>
+          </div>
+          <div class="item">
+            <div class="item-title">
+              <span>Yaprak Sarma</span><span class="price">200 TL</span>
+            </div>
+            <p class="desc"></p>
+          </div>
+          <div class="item">
+            <div class="item-title">
+              <span>Mantı (Kıymalı)</span><span class="price">250 TL</span>
+            </div>
+            <p class="desc"></p>
+          </div>
+        </div>
+      </article>
+
+      <article class="card collapsed">
+        <button class="card-toggle" type="button">
+          <span class="card-title"><span class="pill"></span>Salatalar</span>
+          <span class="caret">⌄</span>
+        </button>
+        <div class="card-body">
+          <div class="item">
+            <div class="item-title">
+              <span>Ton Balıklı Salata</span><span class="price">200 TL</span>
+            </div>
+            <p class="desc"></p>
+          </div>
+          <div class="item">
+            <div class="item-title">
+              <span>Sezar Salata</span><span class="price">200 TL</span>
+            </div>
+            <p class="desc"></p>
+          </div>
+          <div class="item">
+            <div class="item-title">
+              <span>Hellim Peynirli Salata</span><span class="price">160 TL</span>
+            </div>
+            <p class="desc"></p>
+          </div>
+        </div>
+      </article>
+
+      <article class="card collapsed">
+        <button class="card-toggle" type="button">
+          <span class="card-title"><span class="pill"></span>Tatlılar</span>
+          <span class="caret">⌄</span>
+        </button>
+        <div class="card-body">
+          <div class="item">
+            <div class="item-title">
+              <span>Tiramisu</span><span class="price">150 TL</span>
+            </div>
+            <p class="desc"></p>
+          </div>
+          <div class="item">
+            <div class="item-title">
+              <span>San Sebastian</span><span class="price">170 TL</span>
+            </div>
+            <p class="desc"></p>
+          </div>
+          <div class="item">
+            <div class="item-title">
+              <span>Cheesecake</span><span class="price">170 TL</span>
+            </div>
+            <p class="desc"></p>
+          </div>
+          <div class="item">
+            <div class="item-title">
+              <span>Magnolia</span><span class="price">170 TL</span>
+            </div>
+            <p class="desc"></p>
+          </div>
+          <div class="item">
+            <div class="item-title">
+              <span>Fransız Ekler</span><span class="price">150 TL</span>
+            </div>
+            <p class="desc"></p>
+          </div>
+          <div class="item">
+            <div class="item-title">
+              <span>Ajda</span><span class="price">180 TL</span>
+            </div>
+            <p class="desc"></p>
+          </div>
+          <div class="item">
+            <div class="item-title">
+              <span>Trileçe</span><span class="price">150 TL</span>
+            </div>
+            <p class="desc"></p>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="info-section" id="hakkimizda">
+      <h2>Hakkımızda</h2>
+      <p>Greenlight, doğaya saygılı, üçüncü nesil kahve ve sıcak kahvaltı seçenekleriyle misafirlerine ferah bir ortam sunan bir kafedir. Yerel ve taze ürünler kullanmaya özen gösteririz.</p>
+    </section>
+
+    <section class="info-section">
+      <h2>Çalışma Saatlerimiz</h2>
+      <div class="hours-card" aria-label="Çalışma saatleri">
+        <div class="hours-row"><strong>Pazartesi–Cuma</strong><span>09:00–23:00</span></div>
+        <div class="hours-row"><strong>Cumartesi–Pazar</strong><span>10:00–23:30</span></div>
+      </div>
+    </section>
+
+    <section class="info-section" id="iletisim">
+      <h2>İletişim</h2>
+      <div class="contact-grid">
+        <div class="contact-item">
+          <div class="contact-icon">AD</div>
+          <div class="contact-text">
+            <strong>Adres</strong>
+            <span>Greenlight Cafe – Bandırma, Örnek Cadde No:12</span>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">TL</div>
+          <div class="contact-text">
+            <strong>Telefon</strong>
+            <span>0 (266) 000 00 00</span>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">WA</div>
+          <div class="contact-text">
+            <strong>WhatsApp</strong>
+            <span>0 (5xx) 000 00 00</span>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">E</div>
+          <div class="contact-text">
+            <strong>E-posta</strong>
+            <span>info@greenlight.com</span>
+          </div>
+        </div>
+      </div>
+      <a class="map-btn" href="https://maps.google.com" target="_blank" rel="noopener">Konumu Aç</a>
     </section>
   </main>
 
   <footer class="footer">
     <div class="slogan">Greenlight • Doğaya saygılı, ışığı takip et.</div>
-    <div class="social">
-      <a href="#" aria-label="Instagram">IG</a>
-      <a href="#" aria-label="WhatsApp">WA</a>
+    <div class="footer-social">
+      <h4>Bizi Takip Edin</h4>
+      <div class="social">
+        <a href="#" aria-label="Instagram">IG</a>
+        <a href="#" aria-label="WhatsApp">WA</a>
+      </div>
     </div>
   </footer>
 
@@ -948,6 +1240,15 @@
     document.getElementById('startMenu').addEventListener('click', () => {
       introScreen.classList.add('hidden');
       setTimeout(() => introScreen.remove(), 260);
+    });
+
+    // Menü dropdown/akordeon
+    document.querySelectorAll('.card').forEach(card => {
+      const toggle = card.querySelector('.card-toggle');
+      if (!toggle) return;
+      toggle.addEventListener('click', () => {
+        card.classList.toggle('collapsed');
+      });
     });
   </script>
 </body>
