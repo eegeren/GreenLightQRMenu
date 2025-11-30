@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Greenlight QR Menü</title>
+  <style>
+    :root {
+      --green-dark: #15803d;
+      --green: #22c55e;
+      --green-soft: #e9f7ef;
+      --white: #ffffff;
+      --text: #0f172a;
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at 20% 20%, rgba(34, 197, 94, 0.15), transparent 40%),
+                  radial-gradient(circle at 80% 0%, rgba(21, 128, 61, 0.12), transparent 35%),
+                  linear-gradient(180deg, #f6fbf7 0%, #e9f7ef 50%, #f8fffa 100%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* Hafif yeşil dekor */
+    .leafy {
+      position: fixed;
+      z-index: 0;
+      pointer-events: none;
+      filter: blur(0px);
+      opacity: 0.32;
+    }
+    .leafy::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 20% 30%, rgba(34, 197, 94, 0.25), transparent 42%),
+                  radial-gradient(circle at 70% 60%, rgba(21, 128, 61, 0.18), transparent 52%),
+                  radial-gradient(circle at 40% 80%, rgba(34, 197, 94, 0.22), transparent 58%);
+      transform: rotate(-12deg);
+    }
+    .leafy-top { width: 380px; height: 320px; top: -60px; left: -120px; }
+    .leafy-bottom { width: 320px; height: 280px; bottom: -80px; right: -80px; transform: rotate(24deg); opacity: 0.26; }
+
+    .leaf-spray {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(34, 197, 94, 0.24), transparent 26%),
+        radial-gradient(circle at 88% 12%, rgba(21, 128, 61, 0.18), transparent 24%),
+        radial-gradient(circle at 80% 78%, rgba(34, 197, 94, 0.16), transparent 30%),
+        radial-gradient(circle at 24% 82%, rgba(21, 128, 61, 0.14), transparent 32%);
+      z-index: 0;
+      opacity: 0.6;
+    }
+
+    @keyframes drift {
+      from { transform: translate3d(0, 0, 0) rotate(-12deg); }
+      to { transform: translate3d(10px, -8px, 0) rotate(-8deg); }
+    }
+    .leafy-top { animation: drift 8s ease-in-out infinite alternate; }
+    .leafy-bottom { animation: drift 10s ease-in-out infinite alternate-reverse; }
+
+    .notice {
+      text-align: center;
+      font-size: 13px;
+      padding: 10px 14px;
+      background: rgba(21, 128, 61, 0.08);
+      color: var(--green-dark);
+      border-bottom: 1px solid rgba(21, 128, 61, 0.1);
+      letter-spacing: 0.2px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .page {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 22px 16px 78px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin: 16px 0 24px;
+    }
+
+    .logo-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--green), var(--green-dark));
+      position: relative;
+      box-shadow: var(--shadow);
+    }
+
+    .logo-icon::before {
+      content: "";
+      position: absolute;
+      inset: 10px;
+      border-radius: 12px 20px 12px 12px;
+      background: var(--white);
+      transform: rotate(-6deg);
+      opacity: 0.92;
+    }
+
+    .logo-icon::after {
+      content: "";
+      position: absolute;
+      width: 14px;
+      height: 26px;
+      border-radius: 14px 14px 6px 6px;
+      background: var(--green);
+      top: 8px;
+      right: 8px;
+      transform: rotate(18deg);
+      box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.15);
+    }
+
+    .brand-name {
+      font-size: clamp(26px, 6vw, 30px);
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      color: var(--green-dark);
+      text-transform: lowercase;
+    }
+
+    .intro {
+      text-align: center;
+      color: #1f2937;
+      max-width: 640px;
+      margin: 0 auto 24px;
+      line-height: 1.65;
+      font-size: 15px;
+    }
+
+    .menu {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    @media (min-width: 640px) {
+      .menu { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (min-width: 960px) {
+      .menu { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+
+    .card {
+      background: var(--white);
+      border-radius: 18px;
+      padding: 16px 14px 14px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(21, 128, 61, 0.06);
+      transition: transform 140ms ease, box-shadow 140ms ease;
+    }
+
+    .card:hover, .card:focus-within {
+      transform: translateY(-2px) scale(1.01);
+      box-shadow: 0 16px 34px rgba(0, 0, 0, 0.1);
+    }
+
+    .card h3 {
+      margin: 0 0 9px;
+      font-size: clamp(16px, 4vw, 18px);
+      color: var(--green-dark);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pill {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 6px rgba(34, 197, 94, 0.16);
+    }
+
+    .item {
+      padding: 10px 0;
+      border-top: 1px dashed rgba(21, 128, 61, 0.16);
+    }
+
+    .item:first-of-type { border-top: none; }
+
+    .item-title {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+      font-weight: 700;
+      font-size: clamp(14px, 3.6vw, 15px);
+      color: #0f172a;
+    }
+
+    .price {
+      color: var(--green-dark);
+      font-weight: 700;
+      font-size: 14px;
+      background: rgba(34, 197, 94, 0.1);
+      padding: 4px 8px;
+      border-radius: 10px;
+    }
+
+    .desc {
+      margin: 6px 0 0;
+      font-size: 13px;
+      color: #4b5563;
+      line-height: 1.5;
+    }
+
+    .footer {
+      margin-top: 34px;
+      background: var(--green-dark);
+      color: #e5f7ea;
+      padding: 16px;
+      text-align: center;
+      border-radius: 16px 16px 0 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer .slogan {
+      font-size: 13px;
+      letter-spacing: 0.2px;
+    }
+
+    .social {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .social a {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(255, 255, 255, 0.12);
+      color: #e5f7ea;
+      text-decoration: none;
+      font-size: 13px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: transform 120ms ease, background 120ms ease;
+    }
+
+    .social a:hover { transform: translateY(-1px) scale(1.03); background: rgba(255, 255, 255, 0.18); }
+
+    @media (max-width: 480px) {
+      .page { padding: 20px 14px 72px; }
+      .brand { margin: 14px 0 20px; }
+      .card { padding: 15px 13px 13px; }
+      .footer { padding: 14px; }
+    }
+
+    /* AI öneri alanı */
+    .ai-box {
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.12), rgba(21, 128, 61, 0.14));
+      border: 1px solid rgba(21, 128, 61, 0.12);
+      border-radius: 18px;
+      padding: 14px;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+      margin: 0 0 18px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ai-head { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; }
+    .ai-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 14px;
+      background: var(--white);
+      color: var(--green-dark);
+      display: grid;
+      place-items: center;
+      font-size: 18px;
+      box-shadow: 0 8px 18px rgba(21, 128, 61, 0.18);
+    }
+    .ai-title { font-weight: 700; font-size: 16px; color: var(--green-dark); }
+    .ai-sub { font-size: 13px; color: #1f2937; }
+
+    .ai-moods { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+    .chip {
+      border: 1px solid rgba(21, 128, 61, 0.2);
+      background: rgba(255, 255, 255, 0.9);
+      color: #0f172a;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 140ms ease;
+    }
+    .chip.active {
+      background: var(--green-dark);
+      color: var(--white);
+      box-shadow: 0 10px 18px rgba(21, 128, 61, 0.28);
+      border-color: var(--green-dark);
+    }
+    .chip:active { transform: scale(0.98); }
+
+    .ai-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .ai-btn {
+      background: linear-gradient(135deg, var(--green), var(--green-dark));
+      color: var(--white);
+      border: none;
+      border-radius: 14px;
+      padding: 10px 14px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 12px 24px rgba(21, 128, 61, 0.25);
+      transition: transform 140ms ease, box-shadow 140ms ease;
+    }
+    .ai-btn:active { transform: translateY(1px); box-shadow: 0 8px 16px rgba(21, 128, 61, 0.25); }
+    .ai-hint { font-size: 12px; color: #1f2937; }
+
+    .ai-results {
+      margin-top: 12px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .ai-card {
+      background: var(--white);
+      border-radius: 14px;
+      padding: 10px 12px;
+      border: 1px solid rgba(21, 128, 61, 0.08);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.06);
+      display: grid;
+      gap: 4px;
+    }
+    .ai-card .title { font-weight: 700; color: #0f172a; font-size: 14px; display: flex; justify-content: space-between; gap: 8px; }
+    .ai-card .desc { font-size: 12px; color: #4b5563; line-height: 1.4; }
+    .ai-card .tagline { font-size: 12px; color: var(--green-dark); font-weight: 600; }
+
+    /* Giriş ekranı */
+    .intro-screen {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at 30% 20%, rgba(34, 197, 94, 0.28), transparent 40%),
+                  radial-gradient(circle at 80% 10%, rgba(21, 128, 61, 0.24), transparent 40%),
+                  linear-gradient(160deg, #f2fbf5 0%, #e7f7ed 50%, #f8fffa 100%);
+      display: grid;
+      place-items: center;
+      z-index: 30;
+      transition: opacity 220ms ease;
+    }
+    .intro-visual {
+      width: min(960px, 92vw);
+      height: min(700px, 80vh);
+      background: radial-gradient(circle at 28% 26%, rgba(34, 197, 94, 0.22), transparent 32%),
+                  radial-gradient(circle at 72% 18%, rgba(21, 128, 61, 0.2), transparent 36%),
+                  radial-gradient(circle at 50% 80%, rgba(34, 197, 94, 0.18), transparent 40%),
+                  linear-gradient(140deg, #e9f7ef 0%, #f8fffa 100%);
+      border-radius: 28px;
+      border: 1px solid rgba(21, 128, 61, 0.16);
+      box-shadow: 0 28px 60px rgba(0, 0, 0, 0.16);
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+    }
+    .intro-glow {
+      position: absolute;
+      width: 380px;
+      height: 380px;
+      background: radial-gradient(circle, rgba(34, 197, 94, 0.35), transparent 55%);
+      filter: blur(40px);
+      opacity: 0.6;
+      animation: floaty 8s ease-in-out infinite alternate;
+    }
+    .intro-glow.one { top: -80px; left: -60px; }
+    .intro-glow.two { bottom: -120px; right: -40px; animation-duration: 9s; animation-direction: alternate-reverse; }
+    .intro-hero {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      place-items: center;
+      gap: 14px;
+    }
+    .intro-ring {
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 40%, rgba(255,255,255,0.9), rgba(255,255,255,0.75));
+      box-shadow: inset 0 0 0 12px rgba(34, 197, 94, 0.12),
+                  0 30px 50px rgba(0, 0, 0, 0.12);
+      position: relative;
+      display: grid;
+      place-items: center;
+    }
+    .intro-logo {
+      width: 88px;
+      height: 88px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, var(--green), var(--green-dark));
+      position: relative;
+      box-shadow: 0 16px 30px rgba(21, 128, 61, 0.28);
+      animation: floaty 4s ease-in-out infinite alternate;
+    }
+    .intro-logo::before {
+      content: "";
+      position: absolute;
+      inset: 16px;
+      border-radius: 16px 28px 16px 16px;
+      background: var(--white);
+      transform: rotate(-6deg);
+      opacity: 0.92;
+    }
+    .intro-logo::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 38px;
+      border-radius: 14px 14px 6px 6px;
+      background: var(--green);
+      top: 10px;
+      right: 12px;
+      transform: rotate(18deg);
+      box-shadow: 0 0 0 5px rgba(34, 197, 94, 0.18);
+    }
+    .intro-brand {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--green-dark);
+      letter-spacing: 0.8px;
+    }
+    .intro-sub {
+      font-size: 13px;
+      color: #1f2937;
+      letter-spacing: 0.2px;
+      opacity: 0.9;
+    }
+    .intro-btn {
+      background: linear-gradient(135deg, var(--green), var(--green-dark));
+      color: var(--white);
+      border: none;
+      border-radius: 16px;
+      padding: 14px 20px;
+      font-weight: 800;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 16px 28px rgba(21, 128, 61, 0.25);
+      transition: transform 140ms ease, box-shadow 140ms ease;
+      animation: pulse 2.6s ease-in-out infinite;
+      position: absolute;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+    }
+    .intro-btn:active { transform: translateX(-50%) translateY(1px); box-shadow: 0 10px 20px rgba(21, 128, 61, 0.25); }
+    .intro-screen.hidden { opacity: 0; pointer-events: none; }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 14px 26px rgba(21, 128, 61, 0.25); }
+      50% { box-shadow: 0 18px 32px rgba(21, 128, 61, 0.32); }
+      100% { box-shadow: 0 14px 26px rgba(21, 128, 61, 0.25); }
+    }
+    @keyframes floaty {
+      from { transform: translateY(0px) scale(1); }
+      to { transform: translateY(-6px) scale(1.02); }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="leafy leafy-top" aria-hidden="true"></div>
+  <div class="leafy leafy-bottom" aria-hidden="true"></div>
+
+  <div class="intro-screen" id="introScreen">
+    <div class="intro-visual">
+      <div class="leaf-spray" aria-hidden="true" style="opacity:0.55"></div>
+      <div class="intro-glow one" aria-hidden="true"></div>
+      <div class="intro-glow two" aria-hidden="true"></div>
+      <div class="intro-hero">
+        <div class="intro-ring">
+          <div class="intro-logo" aria-hidden="true"></div>
+        </div>
+        <div class="intro-brand">Green Light Cafe</div>
+        <div class="intro-sub">Ferah, yeşil ve ışık dolu seçimler.</div>
+      </div>
+      <button class="intro-btn" id="startMenu">Menüyü Gör</button>
+    </div>
+  </div>
+
+  <div class="notice">Tarifeler her gün güncellenir, kasadaki fiyatlar geçerlidir.</div>
+
+  <main class="page">
+    <div class="brand" aria-label="Greenlight logo">
+      <div class="logo-icon" aria-hidden="true"></div>
+      <div class="brand-name">Green Light Cafe</div>
+    </div>
+
+    <p class="intro">
+      Doğaya saygılı, ferah ve ışık dolu lezzetler. QR menümüzden sürdürülebilir seçimleri keşfedin.
+    </p>
+
+    <section class="ai-box" aria-label="Yapay zeka öneri motoru">
+      <div class="leaf-spray" aria-hidden="true" style="opacity:0.4"></div>
+      <div class="ai-head">
+        <div class="ai-icon" aria-hidden="true">✨</div>
+        <div>
+          <div class="ai-title">Greenlight Öneri Motoru</div>
+          <div class="ai-sub">Ruh hâline göre sana özel 3 öneri</div>
+        </div>
+      </div>
+      <div class="ai-moods" role="list">
+        <button class="chip" data-mood="rahat">Rahatlamak</button>
+        <button class="chip" data-mood="enerji">Enerji toplamak</button>
+        <button class="chip" data-mood="hafif">Hafif ve fit</button>
+        <button class="chip" data-mood="tatli">Tatlı isteği</button>
+        <button class="chip" data-mood="paylas">Paylaşmalık</button>
+        <button class="chip" data-mood="klasik">Klasik seçim</button>
+      </div>
+      <div class="ai-actions">
+        <button id="aiSuggest" class="ai-btn">Önerileri Göster</button>
+        <div class="ai-hint">Seçtiğin ruh hâline uygun menüden seçenekler çıkar.</div>
+      </div>
+      <div class="ai-results" id="aiResults" aria-live="polite"></div>
+    </section>
+
+    <section class="menu">
+      <article class="card">
+        <h3><span class="pill"></span>Kahvaltı</h3>
+        <div class="item">
+          <div class="item-title">
+            <span>Kahvaltı Tabağı</span><span class="price">200 TL</span>
+          </div>
+          <p class="desc">Sınırsız çay ile.</p>
+        </div>
+        <div class="item">
+          <div class="item-title">
+            <span>Simit Tabağı</span><span class="price">110 TL</span>
+          </div>
+          <p class="desc">1 fincan çay dahil.</p>
+        </div>
+        <div class="item">
+          <div class="item-title">
+            <span>Menemen</span><span class="price">100 TL</span>
+          </div>
+          <p class="desc">1 fincan çay ile.</p>
+        </div>
+        <div class="item">
+          <div class="item-title">
+            <span>Sade Omlet</span><span class="price">50 TL</span>
+          </div>
+          <p class="desc"></p>
+        </div>
+        <div class="item">
+          <div class="item-title">
+            <span>Kaşarlı - Beyaz Peynirli Omlet</span><span class="price">75 TL</span>
+          </div>
+          <p class="desc"></p>
+        </div>
+        <div class="item">
+          <div class="item-title">
+            <span>Sebzeli - Kaşarlı Omlet</span><span class="price">75 TL</span>
+          </div>
+          <p class="desc"></p>
+        </div>
+        <div class="item">
+          <div class="item-title">
+            <span>Sucuklu Yumurta</span><span class="price">140 TL</span>
+          </div>
+          <p class="desc"></p>
+        </div>
+        <div class="item">
+          <div class="item-title">
+            <span>Sahanda Sucuk</span><span class="price">120 TL</span>
+          </div>
+          <p class="desc"></p>
+        </div>
+        <div class="item">
+          <div class="item-title">
+            <span>Sigara Böreği</span><span class="price">70 TL</span>
+          </div>
+          <p class="desc"></p>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3><span class="pill"></span>Atıştırmalık</h3>
+        <div class="item">
+          <div class="item-title">
+            <span>Çıtır Sepet</span><span class="price">180 TL</span>
+          </div>
+          <p class="desc"></p>
+        </div>
+        <div class="item">
+          <div class="item-title">
+            <span>Patates Kızartması (K)</span><span class="price">60 TL</span>
+          </div>
+          <p class="desc">Küçük boy.</p>
+        </div>
+        <div class="item">
+          <div class="item-title">
+            <span>Patates Kızartması (O)</span><span class="price">85 TL</span>
+          </div>
+          <p class="desc">Orta boy.</p>
+        </div>
+        <div class="item">
+          <div class="item-title">
+            <span>Patates Kızartması (B)</span><span class="price">120 TL</span>
+          </div>
+          <p class="desc">Büyük boy.</p>
+        </div>
+        <div class="item">
+          <div class="item-title">
+            <span>Hamburger</span><span class="price">220 TL</span>
+          </div>
+          <p class="desc"></p>
+        </div>
+        <div class="item">
+          <div class="item-title">
+            <span>Cheeseburger</span><span class="price">240 TL</span>
+          </div>
+          <p class="desc"></p>
+        </div>
+        <div class="item">
+          <div class="item-title">
+            <span>Tavuk Schnitzel</span><span class="price">250 TL</span>
+          </div>
+          <p class="desc"></p>
+        </div>
+        <div class="item">
+          <div class="item-title">
+            <span>Tavuk Wrap</span><span class="price">230 TL</span>
+          </div>
+          <p class="desc"></p>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3><span class="pill"></span>Tostlar</h3>
+        <div class="item">
+          <div class="item-title">
+            <span>Kaşarlı Tost</span><span class="price">110 TL</span>
+          </div>
+          <p class="desc"></p>
+        </div>
+        <div class="item">
+          <div class="item-title">
+            <span>Karışık Tost</span><span class="price">140 TL</span>
+          </div>
+          <p class="desc"></p>
+        </div>
+        <div class="item">
+          <div class="item-title">
+            <span>Sucuklu Tost</span><span class="price">120 TL</span>
+          </div>
+          <p class="desc"></p>
+        </div>
+        <div class="item">
+          <div class="item-title">
+            <span>Bazlama Tost</span><span class="price">150 TL</span>
+          </div>
+          <p class="desc"></p>
+        </div>
+        <div class="item">
+          <div class="item-title">
+            <span>Pesto Soslu Tost</span><span class="price">120 TL</span>
+          </div>
+          <p class="desc"></p>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3><span class="pill"></span>Gözlemeler</h3>
+        <div class="item">
+          <div class="item-title">
+            <span>Kaşarlı Gözleme</span><span class="price">110 TL</span>
+          </div>
+          <p class="desc"></p>
+        </div>
+        <div class="item">
+          <div class="item-title">
+            <span>Patates + Kaşarlı Gözleme</span><span class="price">130 TL</span>
+          </div>
+          <p class="desc"></p>
+        </div>
+        <div class="item">
+          <div class="item-title">
+            <span>Ispanak + Kaşarlı Gözleme</span><span class="price">130 TL</span>
+          </div>
+          <p class="desc"></p>
+        </div>
+        <div class="item">
+          <div class="item-title">
+            <span>Mantar + Kaşarlı Gözleme</span><span class="price">130 TL</span>
+          </div>
+          <p class="desc"></p>
+        </div>
+        <div class="item">
+          <div class="item-title">
+            <span>Sucuk + Kaşarlı Gözleme</span><span class="price">170 TL</span>
+          </div>
+          <p class="desc"></p>
+        </div>
+        <div class="item">
+          <div class="item-title">
+            <span>Pizza Gözleme</span><span class="price">200 TL</span>
+          </div>
+          <p class="desc"></p>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3><span class="pill"></span>Makarnalar</h3>
+        <div class="item">
+          <div class="item-title">
+            <span>Körü Soslu Makarna</span><span class="price">250 TL</span>
+          </div>
+          <p class="desc"></p>
+        </div>
+        <div class="item">
+          <div class="item-title">
+            <span>Fettuccine Makarna</span><span class="price">250 TL</span>
+          </div>
+          <p class="desc"></p>
+        </div>
+        <div class="item">
+          <div class="item-title">
+            <span>Kremalı Mantarlı Makarna</span><span class="price">230 TL</span>
+          </div>
+          <p class="desc"></p>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3><span class="pill"></span>Anne Eli</h3>
+        <div class="item">
+          <div class="item-title">
+            <span>İçli Köfte (Kıyma + Ceviz)</span><span class="price">240 TL</span>
+          </div>
+          <p class="desc"></p>
+        </div>
+        <div class="item">
+          <div class="item-title">
+            <span>İçli Köfte (Patatesli)</span><span class="price">160 TL</span>
+          </div>
+          <p class="desc"></p>
+        </div>
+        <div class="item">
+          <div class="item-title">
+            <span>Yaprak Sarma</span><span class="price">200 TL</span>
+          </div>
+          <p class="desc"></p>
+        </div>
+        <div class="item">
+          <div class="item-title">
+            <span>Mantı (Kıymalı)</span><span class="price">250 TL</span>
+          </div>
+          <p class="desc"></p>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3><span class="pill"></span>Salatalar</h3>
+        <div class="item">
+          <div class="item-title">
+            <span>Ton Balıklı Salata</span><span class="price">200 TL</span>
+          </div>
+          <p class="desc"></p>
+        </div>
+        <div class="item">
+          <div class="item-title">
+            <span>Sezar Salata</span><span class="price">200 TL</span>
+          </div>
+          <p class="desc"></p>
+        </div>
+        <div class="item">
+          <div class="item-title">
+            <span>Hellim Peynirli Salata</span><span class="price">160 TL</span>
+          </div>
+          <p class="desc"></p>
+        </div>
+      </article>
+
+      <article class="card">
+        <h3><span class="pill"></span>Tatlılar</h3>
+        <div class="item">
+          <div class="item-title">
+            <span>Tiramisu</span><span class="price">150 TL</span>
+          </div>
+          <p class="desc"></p>
+        </div>
+        <div class="item">
+          <div class="item-title">
+            <span>San Sebastian</span><span class="price">170 TL</span>
+          </div>
+          <p class="desc"></p>
+        </div>
+        <div class="item">
+          <div class="item-title">
+            <span>Cheesecake</span><span class="price">170 TL</span>
+          </div>
+          <p class="desc"></p>
+        </div>
+        <div class="item">
+          <div class="item-title">
+            <span>Magnolia</span><span class="price">170 TL</span>
+          </div>
+          <p class="desc"></p>
+        </div>
+        <div class="item">
+          <div class="item-title">
+            <span>Fransız Ekler</span><span class="price">150 TL</span>
+          </div>
+          <p class="desc"></p>
+        </div>
+        <div class="item">
+          <div class="item-title">
+            <span>Ajda</span><span class="price">180 TL</span>
+          </div>
+          <p class="desc"></p>
+        </div>
+        <div class="item">
+          <div class="item-title">
+            <span>Trileçe</span><span class="price">150 TL</span>
+          </div>
+          <p class="desc"></p>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="slogan">Greenlight • Doğaya saygılı, ışığı takip et.</div>
+    <div class="social">
+      <a href="#" aria-label="Instagram">IG</a>
+      <a href="#" aria-label="WhatsApp">WA</a>
+    </div>
+  </footer>
+
+  <script>
+    const moodChips = document.querySelectorAll('.chip');
+    let activeMood = '';
+
+    const menuData = [
+      { name: 'Kahvaltı Tabağı', price: '200 TL', desc: 'Sınırsız çay ile.', moods: ['rahat', 'paylas', 'klasik'], category: 'Kahvaltı' },
+      { name: 'Simit Tabağı', price: '110 TL', desc: '1 fincan çay dahil.', moods: ['klasik', 'rahat'], category: 'Kahvaltı' },
+      { name: 'Menemen', price: '100 TL', desc: '1 fincan çay ile.', moods: ['enerji', 'klasik'], category: 'Kahvaltı' },
+      { name: 'Sade Omlet', price: '50 TL', desc: 'Minimal, protein odaklı.', moods: ['hafif', 'klasik'], category: 'Kahvaltı' },
+      { name: 'Kaşarlı - Beyaz Peynirli Omlet', price: '75 TL', desc: 'Dengeli ve doyurucu.', moods: ['klasik'], category: 'Kahvaltı' },
+      { name: 'Sebzeli - Kaşarlı Omlet', price: '75 TL', desc: 'Taze sebzelerle hafif.', moods: ['hafif'], category: 'Kahvaltı' },
+      { name: 'Sucuklu Yumurta', price: '140 TL', desc: 'Yoğun aromalı.', moods: ['enerji'], category: 'Kahvaltı' },
+      { name: 'Sahanda Sucuk', price: '120 TL', desc: 'Klasik lezzet.', moods: ['enerji', 'klasik'], category: 'Kahvaltı' },
+      { name: 'Sigara Böreği', price: '70 TL', desc: 'Paylaşmalık çıtır.', moods: ['paylas'], category: 'Kahvaltı' },
+      { name: 'Çıtır Sepet', price: '180 TL', desc: 'Paylaşmalık karışık.', moods: ['paylas', 'enerji'], category: 'Atıştırmalık' },
+      { name: 'Patates Kızartması (K)', price: '60 TL', desc: 'Küçük boy.', moods: ['paylas', 'klasik'], category: 'Atıştırmalık' },
+      { name: 'Patates Kızartması (O)', price: '85 TL', desc: 'Orta boy.', moods: ['paylas', 'klasik'], category: 'Atıştırmalık' },
+      { name: 'Patates Kızartması (B)', price: '120 TL', desc: 'Büyük boy.', moods: ['paylas'], category: 'Atıştırmalık' },
+      { name: 'Hamburger', price: '220 TL', desc: 'Doyurucu klasik.', moods: ['enerji', 'klasik'], category: 'Atıştırmalık' },
+      { name: 'Cheeseburger', price: '240 TL', desc: 'Ekstra peynir.', moods: ['enerji', 'klasik'], category: 'Atıştırmalık' },
+      { name: 'Tavuk Schnitzel', price: '250 TL', desc: 'Çıtır pane tavuk.', moods: ['enerji'], category: 'Atıştırmalık' },
+      { name: 'Tavuk Wrap', price: '230 TL', desc: 'Taşınabilir ve pratik.', moods: ['hafif', 'enerji'], category: 'Atıştırmalık' },
+      { name: 'Kaşarlı Tost', price: '110 TL', desc: 'Sade ve doyurucu.', moods: ['klasik'], category: 'Tostlar' },
+      { name: 'Karışık Tost', price: '140 TL', desc: 'Sucuk ve kaşar.', moods: ['enerji'], category: 'Tostlar' },
+      { name: 'Sucuklu Tost', price: '120 TL', desc: 'Yoğun lezzet.', moods: ['enerji', 'klasik'], category: 'Tostlar' },
+      { name: 'Bazlama Tost', price: '150 TL', desc: 'Yumuşak bazlama ile.', moods: ['paylas', 'klasik'], category: 'Tostlar' },
+      { name: 'Pesto Soslu Tost', price: '120 TL', desc: 'Ferahlık ve ot aroması.', moods: ['hafif'], category: 'Tostlar' },
+      { name: 'Kaşarlı Gözleme', price: '110 TL', desc: 'İnce hamur, bol kaşar.', moods: ['klasik'], category: 'Gözlemeler' },
+      { name: 'Patates + Kaşarlı Gözleme', price: '130 TL', desc: 'Doyurucu patates.', moods: ['enerji'], category: 'Gözlemeler' },
+      { name: 'Ispanak + Kaşarlı Gözleme', price: '130 TL', desc: 'Yeşil ve hafif.', moods: ['hafif'], category: 'Gözlemeler' },
+      { name: 'Mantar + Kaşarlı Gözleme', price: '130 TL', desc: 'Toprak aroması.', moods: ['hafif'], category: 'Gözlemeler' },
+      { name: 'Sucuk + Kaşarlı Gözleme', price: '170 TL', desc: 'Baharatlı dokunuş.', moods: ['enerji'], category: 'Gözlemeler' },
+      { name: 'Pizza Gözleme', price: '200 TL', desc: 'Pizza ruhu içinde.', moods: ['enerji', 'paylas'], category: 'Gözlemeler' },
+      { name: 'Körü Soslu Makarna', price: '250 TL', desc: 'Baharatlı ve aromatik.', moods: ['enerji'], category: 'Makarnalar' },
+      { name: 'Fettuccine Makarna', price: '250 TL', desc: 'Klasik krema dokusu.', moods: ['klasik'], category: 'Makarnalar' },
+      { name: 'Kremalı Mantarlı Makarna', price: '230 TL', desc: 'Mantarlı kremalı sos.', moods: ['rahat'], category: 'Makarnalar' },
+      { name: 'İçli Köfte (Kıyma + Ceviz)', price: '240 TL', desc: 'Doyurucu ve aromatik.', moods: ['enerji'], category: 'Anne Eli' },
+      { name: 'İçli Köfte (Patatesli)', price: '160 TL', desc: 'Hafif alternatif.', moods: ['hafif'], category: 'Anne Eli' },
+      { name: 'Yaprak Sarma', price: '200 TL', desc: 'Zeytinyağlı ferahlık.', moods: ['hafif', 'rahat'], category: 'Anne Eli' },
+      { name: 'Mantı (Kıymalı)', price: '250 TL', desc: 'Klasik doyuruculuk.', moods: ['enerji', 'klasik'], category: 'Anne Eli' },
+      { name: 'Ton Balıklı Salata', price: '200 TL', desc: 'Protein dengeli.', moods: ['hafif'], category: 'Salatalar' },
+      { name: 'Sezar Salata', price: '200 TL', desc: 'Çıtır ve dengeli.', moods: ['hafif', 'klasik'], category: 'Salatalar' },
+      { name: 'Hellim Peynirli Salata', price: '160 TL', desc: 'Izgara hellim ferahlığı.', moods: ['hafif'], category: 'Salatalar' },
+      { name: 'Tiramisu', price: '150 TL', desc: 'Kakao ve espresso notaları.', moods: ['tatli', 'rahat'], category: 'Tatlılar' },
+      { name: 'San Sebastian', price: '170 TL', desc: 'Karamelize üst dokusu.', moods: ['tatli'], category: 'Tatlılar' },
+      { name: 'Cheesecake', price: '170 TL', desc: 'Kremamsı ve hafif ekşi.', moods: ['tatli'], category: 'Tatlılar' },
+      { name: 'Magnolia', price: '170 TL', desc: 'Meyve ve krema dengesi.', moods: ['tatli', 'hafif'], category: 'Tatlılar' },
+      { name: 'Fransız Ekler', price: '150 TL', desc: 'Vanilya kremalı çıtır hamur.', moods: ['tatli'], category: 'Tatlılar' },
+      { name: 'Ajda', price: '180 TL', desc: 'Porsiyonluk tatlı seçimi.', moods: ['tatli'], category: 'Tatlılar' },
+      { name: 'Trileçe', price: '150 TL', desc: 'Sütlü ve hafif karamel.', moods: ['tatli', 'rahat'], category: 'Tatlılar' },
+    ];
+
+    moodChips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        moodChips.forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        activeMood = chip.dataset.mood;
+      });
+    });
+
+    function pickSuggestions(mood) {
+      if (!mood) return [];
+      const pool = menuData.filter(item => item.moods.includes(mood));
+      if (!pool.length) return [];
+      const shuffled = pool.sort(() => 0.5 - Math.random());
+      return shuffled.slice(0, 3);
+    }
+
+    const resultsEl = document.getElementById('aiResults');
+    document.getElementById('aiSuggest').addEventListener('click', () => {
+      const picks = pickSuggestions(activeMood);
+      resultsEl.innerHTML = '';
+      if (!activeMood) {
+        resultsEl.innerHTML = '<div class="ai-card"><div class="desc">Önce bir ruh hâli seç.</div></div>';
+        return;
+      }
+      if (!picks.length) {
+        resultsEl.innerHTML = '<div class="ai-card"><div class="desc">Şimdilik öneri bulunamadı.</div></div>';
+        return;
+      }
+      picks.forEach(p => {
+        const el = document.createElement('div');
+        el.className = 'ai-card';
+        el.innerHTML = `
+          <div class="title"><span>${p.name}</span><span>${p.price}</span></div>
+          <div class="desc">${p.desc}</div>
+          <div class="tagline">${p.category} • ${activeMood.toUpperCase()} modu</div>
+        `;
+        resultsEl.appendChild(el);
+      });
+    });
+
+    // Giriş ekranı kapanışı
+    const introScreen = document.getElementById('introScreen');
+    document.getElementById('startMenu').addEventListener('click', () => {
+      introScreen.classList.add('hidden');
+      setTimeout(() => introScreen.remove(), 260);
+    });
+  </script>
+</body>
+</html>
