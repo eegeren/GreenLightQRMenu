@@ -1237,9 +1237,29 @@
 
     // Giriş ekranı kapanışı
     const introScreen = document.getElementById('introScreen');
-    document.getElementById('startMenu').addEventListener('click', () => {
+    function closeIntro(callback) {
+      if (!introScreen) return;
       introScreen.classList.add('hidden');
-      setTimeout(() => introScreen.remove(), 260);
+      setTimeout(() => {
+        introScreen.remove();
+        if (callback) callback();
+      }, 260);
+    }
+
+    document.getElementById('startMenu').addEventListener('click', () => closeIntro());
+
+    document.querySelectorAll('.intro-link').forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const target = link.getAttribute('href');
+        const scrollToTarget = () => {
+          if (target && target.startsWith('#')) {
+            const el = document.querySelector(target);
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        };
+        closeIntro(scrollToTarget);
+      });
     });
 
     // Menü dropdown/akordeon
