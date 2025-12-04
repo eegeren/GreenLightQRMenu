@@ -200,6 +200,9 @@
     padding: 12px;
     border: 1px solid #e5e7eb;
     text-align: left;
+    opacity: 0;
+    transform: translateY(8px);
+    animation: fadeUp 320ms ease forwards;
   }
   .ai-card h4 {
     margin: 0 0 6px;
@@ -218,6 +221,24 @@
     font-size: 13px;
     margin-top: 8px;
     display: inline-block;
+  }
+
+  /* PAGE REVEAL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  .revealed {
+    animation: pageFade 620ms ease forwards;
+  }
+  @keyframes pageFade {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   /* MENU SECTION */
@@ -266,6 +287,11 @@
     box-shadow: 0 8px 25px rgba(0,0,0,0.1);
     border: 1px solid #e5e7eb;
     text-align: left;
+    transition: transform 160ms ease, box-shadow 160ms ease;
+  }
+  .menu-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 28px rgba(0,0,0,0.12);
   }
   .cat-header {
     width: 100%;
@@ -357,7 +383,7 @@
 <body>
 
 <!-- NAVBAR -->
-<div class="navbar">
+<div class="navbar reveal">
   <div class="brand">
     <img src="logo.png" alt="Green Light logosu" class="brand-logo">
     <span>GREEN LIGHT</span>
@@ -370,14 +396,14 @@
 </div>
 
 <!-- HERO -->
-<div class="hero">
+<div class="hero reveal">
   <h1>Green Light Coffee & Breakfast</h1>
   <p>Bandırma’nın yeni nesil kahve ve kahvaltı deneyimi.</p>
   <a class="btn" href="#menu">Menüyü Gör</a>
 </div>
 
 <!-- FEATURES -->
-<div class="features">
+<div class="features reveal">
   <div class="feature-card">
     <h3>Yapay Zekâ Destekli Menüler</h3>
     <p>Müşterilerin zevklerine göre akıllı öneriler sunan modern dijital menü altyapısı.</p>
@@ -393,7 +419,7 @@
 </div>
 
 <!-- AI SUGGESTIONS -->
-<div class="ai-box" id="ai">
+<div class="ai-box reveal" id="ai">
   <div class="ai-head">
     <div class="ai-icon">✨</div>
     <div>
@@ -417,7 +443,7 @@
 </div>
 
 <!-- MENU -->
-<div id="menu" class="menu">
+<div id="menu" class="menu reveal">
   <h2>Menümüz</h2>
   <p>Fiyatlar günceldir, afiyet olsun!</p>
   <div class="menu-filter">
@@ -429,7 +455,7 @@
 </div>
 
 <!-- ABOUT -->
-<div id="about" class="about">
+<div id="about" class="about reveal">
   <h2>Hakkımızda</h2>
   <p>
     Green Light Coffee & Breakfast, Bandırma’da üçüncü nesil kahve kültürünü modern kahvaltı anlayışıyla birleştiren
@@ -438,14 +464,14 @@
 </div>
 
 <!-- CONTACT -->
-<div id="contact" class="contact">
+<div id="contact" class="contact reveal">
   <h2>İletişim</h2>
   <p>📍 Paşakonak Mah. 18033 Sk. 11/A Bandırma </p>
   <p>Telefon: 0 555 555 55 55</p>
 </div>
 
 <!-- FOOTER -->
-<div class="footer">
+<div class="footer reveal">
   © 2025 Green Light Coffee — Bandırma
 </div>
 
@@ -667,6 +693,20 @@
   }
 
   aiButton.addEventListener('click', suggest);
+
+  // Page reveal on load and force start at top
+  document.addEventListener('DOMContentLoaded', () => {
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+
+    const reveals = document.querySelectorAll('.reveal');
+    reveals.forEach((el, idx) => {
+      el.style.animationDelay = `${idx * 80}ms`;
+      el.classList.add('revealed');
+    });
+  });
 </script>
 </body>
 </html>
