@@ -62,35 +62,12 @@
   .insta-link {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    text-decoration: none;
   }
-  .insta-icon {
-    width: 18px;
-    height: 18px;
-    border-radius: 4px;
-    background: radial-gradient(circle at 30% 30%, #ffdc80, transparent 45%),
-                radial-gradient(circle at 70% 70%, #f56040, transparent 45%),
-                linear-gradient(135deg, #f77737, #e1306c 60%, #c13584);
-    border: 1px solid rgba(255,255,255,0.6);
-    position: relative;
-    flex-shrink: 0;
-  }
-  .insta-icon::before {
-    content: "";
-    position: absolute;
-    inset: 4px;
-    border: 1.6px solid white;
-    border-radius: 3px;
-  }
-  .insta-icon::after {
-    content: "";
-    position: absolute;
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background: white;
-    top: 4px;
-    right: 4px;
+  .insta-img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
   }
 
   /* HERO */
@@ -409,10 +386,6 @@
     <a href="#menu">Menü</a>
     <a href="#about">Hakkımızda</a>
     <a href="#contact">İletişim</a>
-    <a class="insta-link" href="https://www.instagram.com/greenlight.7cafe/" target="_blank" rel="noreferrer">
-      <span class="insta-icon" aria-hidden="true"></span>
-      <span>Instagram</span>
-    </a>
   </div>
 </div>
 
@@ -468,6 +441,11 @@
   <h2>İletişim</h2>
   <p>📍 Paşakonak Mah. 18033 Sk. 11/A Bandırma </p>
   <p>Telefon: 0 530 816 60 17</p>
+  <p>
+    <a class="insta-link" href="https://www.instagram.com/greenlight.7cafe/" target="_blank" rel="noreferrer" aria-label="Instagram">
+      <img src="./instalogo.png" alt="Instagram" class="insta-img">
+    </a>
+  </p>
 </div>
 
 <!-- FOOTER -->
