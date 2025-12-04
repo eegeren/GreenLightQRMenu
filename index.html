@@ -1,1456 +1,481 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Green Light QR Menü</title>
-  <style>
-    :root {
-      --green-dark: #15803d;
-      --green: #22c55e;
-      --green-soft: #e9f7ef;
-      --white: #ffffff;
-      --text: #0f172a;
-      --shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Green Light Coffee & Breakfast</title>
+<style>
+  html { scroll-behavior: smooth; }
 
-    * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: #f5f3e7;
+    color: #222;
+    overflow-x: hidden;
+  }
 
+  /* NAVBAR */
+  .navbar {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 18px 30px;
+    background: #064e3b;
+    color: white;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .navbar .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    min-width: 200px;
+    flex: 1 1 auto;
+  }
+  .navbar-links {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    flex: 1 1 auto;
+  }
+  .brand-logo {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    object-fit: contain;
+    background: rgba(255,255,255,0.1);
+    padding: 6px;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+  .navbar a {
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+  }
 
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at 20% 20%, rgba(34, 197, 94, 0.15), transparent 40%),
-                  radial-gradient(circle at 80% 0%, rgba(21, 128, 61, 0.12), transparent 35%),
-                  linear-gradient(180deg, #f6fbf7 0%, #e9f7ef 50%, #f8fffa 100%);
-      color: var(--text);
-      min-height: 100vh;
-    }
+  /* HERO */
+  .hero {
+    padding: 60px 30px;
+    text-align: center;
+    background: url('https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+    color: white;
+    overflow: hidden;
+  }
+  .hero h1 {
+    font-size: 42px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    text-shadow: 0 3px 10px rgba(0,0,0,0.3);
+  }
+  .hero p {
+    font-size: 18px;
+    margin-bottom: 20px;
+    opacity: 0.9;
+  }
+  .hero .btn {
+    display: inline-block;
+    padding: 12px 28px;
+    background: #ffd95a;
+    color: #064e3b;
+    border-radius: 30px;
+    font-weight: bold;
+    text-decoration: none;
+  }
 
-    /* Hafif yeşil dekor */
-    .leafy {
-      position: fixed;
-      z-index: 0;
-      pointer-events: none;
-      filter: blur(0px);
-      opacity: 0.32;
-    }
+  /* FEATURES */
+  .features {
+    padding: 60px 20px;
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .feature-card {
+    background: white;
+    padding: 30px;
+    width: min(320px, 100%);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  }
+  .feature-card h3 {
+    margin-top: 0;
+    color: #064e3b;
+  }
 
-    .leafy::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at 20% 30%, rgba(34, 197, 94, 0.25), transparent 42%),
-                  radial-gradient(circle at 70% 60%, rgba(21, 128, 61, 0.18), transparent 52%),
-                  radial-gradient(circle at 40% 80%, rgba(34, 197, 94, 0.22), transparent 58%);
-      transform: rotate(-12deg);
-    }
+  /* MENU SECTION */
+  .menu {
+    padding: 50px 20px;
+    text-align: center;
+    scroll-margin-top: 90px;
+  }
+  .menu h2 {
+    font-size: 32px;
+    color: #064e3b;
+    margin-bottom: 6px;
+  }
+  .menu-filter {
+    display: flex;
+    justify-content: center;
+    margin: 12px 0 20px;
+  }
+  .menu-select {
+    min-width: 200px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid #d1d5db;
+    font-size: 14px;
+    background: #fff;
+    color: #064e3b;
+    font-weight: 700;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+  }
+  .menu p {
+    margin: 0 0 18px;
+    color: #475569;
+    font-size: 14px;
+  }
+  .menu-items {
+    margin-top: 8px;
+    display: grid;
+    gap: 14px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    padding: 0 4px;
+  }
+  .menu-card {
+    background: white;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    border: 1px solid #e5e7eb;
+    text-align: left;
+  }
+  .cat-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #ecfdf3;
+    border: 1px solid #d1fae5;
+    color: #064e3b;
+    padding: 12px 14px;
+    border-radius: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.06);
+  }
+  .cat-header span { font-size: 15px; }
+  .cat-caret {
+    transition: transform 150ms ease;
+    font-size: 16px;
+  }
+  .cat-header.collapsed .cat-caret {
+    transform: rotate(-90deg);
+  }
+  .menu-card h4 {
+    margin: 0 0 6px;
+    color: #1a7f5a;
+    font-size: 16px;
+  }
+  .menu-card p {
+    font-size: 14px;
+    opacity: 0.8;
+    margin: 0 0 10px;
+    line-height: 1.5;
+  }
 
-    .leafy-top { width: 380px; height: 320px; top: -60px; left: -120px; }
-    .leafy-bottom { width: 320px; height: 280px; bottom: -80px; right: -80px; transform: rotate(24deg); opacity: 0.26; }
+  /* ABOUT */
+  .about {
+    padding: 60px 20px;
+    background: #064e3b;
+    color: white;
+    text-align: center;
+  }
+  .about h2 {
+    font-size: 32px;
+  }
+  .about p {
+    max-width: 700px;
+    margin: auto;
+    line-height: 1.6;
+  }
 
-    .leaf-spray {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      background:
-        radial-gradient(circle at 12% 18%, rgba(34, 197, 94, 0.24), transparent 26%),
-        radial-gradient(circle at 88% 12%, rgba(21, 128, 61, 0.18), transparent 24%),
-        radial-gradient(circle at 80% 78%, rgba(34, 197, 94, 0.16), transparent 30%),
-        radial-gradient(circle at 24% 82%, rgba(21, 128, 61, 0.14), transparent 32%);
-      z-index: 0;
-      opacity: 0.6;
-    }
+  /* CONTACT */
+  .contact {
+    padding: 40px 20px;
+    text-align: center;
+  }
+  .contact h2 {
+    color: #064e3b;
+  }
 
-    @keyframes drift {
-      from { transform: translate3d(0, 0, 0) rotate(-12deg); }
-      to { transform: translate3d(10px, -8px, 0) rotate(-8deg); }
-    }
+  /* FOOTER */
+  .footer {
+    padding: 15px;
+    text-align: center;
+    background: #064e3b;
+    color: white;
+    font-size: 14px;
+  }
 
-    .leafy-top { animation: drift 8s ease-in-out infinite alternate; }
-    .leafy-bottom { animation: drift 10s ease-in-out infinite alternate-reverse; }
-
-    .notice {
-      text-align: center;
-      font-size: 13px;
-      padding: 10px 14px;
-      background: rgba(21, 128, 61, 0.08);
-      color: var(--green-dark);
-      border-bottom: 1px solid rgba(21, 128, 61, 0.1);
-      letter-spacing: 0.2px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .page {
-      max-width: 1080px;
-      margin: 0 auto;
-      padding: 22px 16px 78px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      margin: 16px 0 10px;
-    }
-
-    .brand-logo {
-      width: 52px;
-      height: 52px;
-      border-radius: 14px;
-      padding: 6px;
-      object-fit: contain;
-      background: var(--white);
-      border: 1px solid rgba(21, 128, 61, 0.12);
-      box-shadow: var(--shadow);
-    }
-
-    .brand-name {
-      font-size: clamp(26px, 6vw, 30px);
-      font-weight: 700;
-      letter-spacing: 0.8px;
-      color: var(--green-dark);
-      text-transform: lowercase;
-    }
-    
-
-    .nav-links {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin-bottom: 16px;
-      flex-wrap: wrap;
-    }
-
-    .nav-links a {
-      text-decoration: none;
-      color: var(--green-dark);
-      font-weight: 700;
-      font-size: 13px;
-      padding: 8px 12px;
-      background: rgba(34, 197, 94, 0.1);
-      border-radius: 999px;
-      border: 1px solid rgba(21, 128, 61, 0.12);
-      transition: transform 140ms ease, box-shadow 140ms ease;
-      box-shadow: 0 10px 18px rgba(0, 0, 0, 0.04);
-    }
-
-    .nav-links a:hover { transform: translateY(-1px); box-shadow: 0 12px 20px rgba(0,0,0,0.08); }
-
-    .intro {
-      text-align: center;
-      color: #1f2937;
-      max-width: 640px;
-      margin: 0 auto 24px;
-      line-height: 1.65;
-      font-size: 15px;
-    }
-
-    .menu {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 14px;
-      align-items: start;
-    }
-
-    @media (min-width: 640px) {
-      .menu { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    }
-    @media (min-width: 960px) {
-      .menu { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    }
-
-    .card {
-      background: var(--white);
-      border-radius: 18px;
-      padding: 10px 14px 14px;
-      box-shadow: var(--shadow);
-      border: 1px solid rgba(21, 128, 61, 0.06);
-      transition: transform 140ms ease, box-shadow 140ms ease;
-      touch-action: manipulation;
-    }
-
-    .card:hover, .card:focus-within {
-      transform: translateY(-2px) scale(1.01);
-      box-shadow: 0 16px 34px rgba(0, 0, 0, 0.1);
-    }
-
-    .card-toggle {
-      width: 100%;
-      border: none;
-      background: transparent;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 4px 10px;
-      cursor: pointer;
-      gap: 10px;
-      border-radius: 12px;
-    }
-
-    .card-title {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: clamp(16px, 4vw, 18px);
-      color: var(--green-dark);
-      font-weight: 700;
-    }
-
-    .caret {
-      font-size: 18px;
-      color: var(--green-dark);
-      transition: transform 140ms ease;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 24px;
-      height: 24px;
-    }
-
-    .card.collapsed .caret { transform: rotate(-90deg); }
-
-    .card-body {
-      display: grid;
-      gap: 0;
-      padding-top: 4px;
-    }
-
-    .card.collapsed .card-body { display: none; }
-
-
-    .pill {
-      display: inline-block;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--green);
-      box-shadow: 0 0 0 6px rgba(34, 197, 94, 0.16);
-    }
-
-    .item {
-      padding: 10px 0;
-      border-top: 1px dashed rgba(21, 128, 61, 0.16);
-    }
-
-    .item:first-of-type { border-top: none; }
-
-    .item-title {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 8px;
-      font-weight: 700;
-      font-size: clamp(14px, 3.6vw, 15px);
-      color: #0f172a;
-    }
-
-    .price {
-      color: var(--green-dark);
-      font-weight: 700;
-      font-size: 14px;
-      background: rgba(34, 197, 94, 0.1);
-      padding: 4px 8px;
-      border-radius: 10px;
-    }
-
-    .desc {
-      margin: 6px 0 0;
-      font-size: 13px;
-      color: #4b5563;
-      line-height: 1.5;
-    }
-    .item-media {
-      display: grid;
-      justify-items: center;
-      margin-top: 6px;
-    }
-    .item-img {
-      width: min(180px, 100%);
-      height: 120px;
-      border-radius: 12px;
-      object-fit: cover;
-      border: 1px solid rgba(21, 128, 61, 0.12);
-      box-shadow: 0 6px 12px rgba(0,0,0,0.06);
-      background: #f5fbf7;
-    }
-
-    .footer {
-      margin-top: 34px;
-      background: var(--green-dark);
-      color: #e5f7ea;
-      padding: 16px;
-      text-align: center;
-      border-radius: 16px 16px 0 0;
-      display: flex;
+  @media (max-width: 640px) {
+    .navbar {
+      padding: 14px 16px;
       flex-direction: column;
-      gap: 10px;
-      position: relative;
-      z-index: 1;
+      align-items: flex-start;
     }
-
-    .footer .slogan {
-      font-size: 13px;
-      letter-spacing: 0.2px;
-      text-align: center;
-    }
-
-    .footer-social {
-      display: grid;
-      gap: 8px;
-      justify-items: center;
-    }
-    .footer-social h4 {
-      margin: 0;
-      font-size: 13px;
-      letter-spacing: 0.3px;
-      color: #d5f0dd;
-    }
-
-    .social {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-    }
-
-    .social a {
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      background: rgba(255, 255, 255, 0.12);
-      color: #e5f7ea;
-      text-decoration: none;
-      font-size: 13px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      transition: transform 120ms ease, background 120ms ease;
-    }
-
-    .social a:hover { transform: translateY(-1px) scale(1.03); background: rgba(255, 255, 255, 0.18); }
-
-    @media (max-width: 480px) {
-      .page { padding: 18px 12px 70px; }
-      .brand { margin: 12px 0 18px; }
-      .card { padding: 12px 12px 12px; }
-      .card-toggle { padding: 12px 4px; }
-      .card-title { font-size: 16px; }
-      .footer { padding: 14px; }
-      .intro-visual { height: 72vh; border-radius: 22px; }
-      .intro-btn { width: 90%; }
-    }
-    @media (max-width: 640px) {
-      .leafy-top, .leafy-bottom { display: none; }
-      .leaf-spray { opacity: 0.25; }
-      .intro-visual { box-shadow: 0 18px 38px rgba(0,0,0,0.12); }
-    }
-
-    /* AI öneri alanı */
-    .ai-box {
-      background: linear-gradient(135deg, rgba(34, 197, 94, 0.12), rgba(21, 128, 61, 0.14));
-      border: 1px solid rgba(21, 128, 61, 0.12);
-      border-radius: 18px;
-      padding: 14px;
-      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
-      margin: 0 0 18px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .ai-head { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; }
-    .ai-icon {
-      width: 38px;
-      height: 38px;
-      border-radius: 14px;
-      background: var(--white);
-      color: var(--green-dark);
-      display: grid;
-      place-items: center;
-      font-size: 18px;
-      box-shadow: 0 8px 18px rgba(21, 128, 61, 0.18);
-    }
-    .ai-title { font-weight: 700; font-size: 16px; color: var(--green-dark); }
-    .ai-sub { font-size: 13px; color: #1f2937; }
-
-    .ai-moods { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
-    .chip {
-      border: 1px solid rgba(21, 128, 61, 0.2);
-      background: rgba(255, 255, 255, 0.9);
-      color: #0f172a;
-      border-radius: 999px;
-      padding: 8px 12px;
-      font-size: 13px;
-      cursor: pointer;
-      transition: all 140ms ease;
-    }
-    .chip.active {
-      background: var(--green-dark);
-      color: var(--white);
-      box-shadow: 0 10px 18px rgba(21, 128, 61, 0.28);
-      border-color: var(--green-dark);
-    }
-    .chip:active { transform: scale(0.98); }
-
-    .ai-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-    .ai-btn {
-      background: linear-gradient(135deg, var(--green), var(--green-dark));
-      color: var(--white);
-      border: none;
-      border-radius: 14px;
-      padding: 10px 14px;
-      font-weight: 700;
-      font-size: 14px;
-      cursor: pointer;
-      box-shadow: 0 12px 24px rgba(21, 128, 61, 0.25);
-      transition: transform 140ms ease, box-shadow 140ms ease;
-    }
-    .ai-btn:active { transform: translateY(1px); box-shadow: 0 8px 16px rgba(21, 128, 61, 0.25); }
-    .ai-hint { font-size: 12px; color: #1f2937; }
-
-    .ai-results {
-      margin-top: 12px;
-      display: grid;
-      gap: 8px;
-    }
-
-    .ai-card {
-      background: var(--white);
-      border-radius: 14px;
-      padding: 10px 12px;
-      border: 1px solid rgba(21, 128, 61, 0.08);
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.06);
-      display: grid;
-      gap: 4px;
-    }
-    .ai-card .title { font-weight: 700; color: #0f172a; font-size: 14px; display: flex; justify-content: space-between; gap: 8px; }
-    .ai-card .desc { font-size: 12px; color: #4b5563; line-height: 1.4; }
-    .ai-card .tagline { font-size: 12px; color: var(--green-dark); font-weight: 600; }
-
-    /* Giriş ekranı */
-    .intro-screen {
-      position: fixed;
-      inset: 0;
-      background: radial-gradient(circle at 30% 20%, rgba(34, 197, 94, 0.28), transparent 40%),
-                  radial-gradient(circle at 80% 10%, rgba(21, 128, 61, 0.24), transparent 40%),
-                  linear-gradient(160deg, #f2fbf5 0%, #e7f7ed 50%, #f8fffa 100%);
-      display: grid;
-      place-items: center;
-      z-index: 30;
-      transition: opacity 220ms ease;
-    }
-    .intro-visual {
-      width: min(960px, 92vw);
-      height: min(700px, 80vh);
-      background: radial-gradient(circle at 28% 26%, rgba(34, 197, 94, 0.22), transparent 32%),
-                  radial-gradient(circle at 72% 18%, rgba(21, 128, 61, 0.2), transparent 36%),
-                  radial-gradient(circle at 50% 80%, rgba(34, 197, 94, 0.18), transparent 40%),
-                  linear-gradient(140deg, #e9f7ef 0%, #f8fffa 100%);
-      border-radius: 28px;
-      border: 1px solid rgba(21, 128, 61, 0.16);
-      box-shadow: 0 28px 60px rgba(0, 0, 0, 0.16);
-      position: relative;
-      overflow: hidden;
-      display: grid;
-      place-items: center;
-      padding: 20px;
-    }
-    .intro-glow {
-      position: absolute;
-      width: 380px;
-      height: 380px;
-      background: radial-gradient(circle, rgba(34, 197, 94, 0.35), transparent 55%);
-      filter: blur(40px);
-      opacity: 0.6;
-      animation: floaty 8s ease-in-out infinite alternate;
-    }
-    .intro-glow.one { top: -80px; left: -60px; }
-    .intro-glow.two { bottom: -120px; right: -40px; animation-duration: 9s; animation-direction: alternate-reverse; }
-    .intro-hero {
-      position: relative;
-      z-index: 2;
-      display: grid;
-      place-items: center;
-      gap: 14px;
-    }
-
-    .intro-ring {
-      width: 220px;
-      height: 220px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 40% 40%, rgba(255,255,255,0.9), rgba(255,255,255,0.75));
-      box-shadow: inset 0 0 0 12px rgba(34, 197, 94, 0.12),
-                  0 30px 50px rgba(0, 0, 0, 0.12);
-      position: relative;
-      display: grid;
-      place-items: center;
-    }
-
-    .intro-logo {
-      width: 120px;
-      height: 120px;
-      border-radius: 24px;
-      padding: 12px;
-      object-fit: contain;
-      background: var(--white);
-      border: 1px solid rgba(21, 128, 61, 0.12);
-      box-shadow: 0 16px 30px rgba(21, 128, 61, 0.24);
-      animation: floaty 4s ease-in-out infinite alternate;
-    }
-    .intro-brand {
-      font-size: 22px;
-      font-weight: 800;
-      color: var(--green-dark);
-      letter-spacing: 0.8px;
-    }
-    .intro-welcome {
-      font-size: 18px;
-      font-weight: 900;
-      color: var(--green-dark);
-      letter-spacing: 1.6px;
-      text-transform: uppercase;
-      animation: welcome-pop 1.8s ease-in-out both;
-    }
-    .intro-sub {
-      font-size: 13px;
-      color: #1f2937;
-      letter-spacing: 0.2px;
-      opacity: 0.9;
-    }
-    .intro-links {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: center;
-      z-index: 2;
-      position: relative;
-    }
-    .intro-link {
-      text-decoration: none;
-      padding: 10px 14px;
-      border-radius: 12px;
-      border: 1px solid rgba(21, 128, 61, 0.2);
-      color: var(--green-dark);
-      background: rgba(255, 255, 255, 0.88);
-      font-weight: 700;
-      font-size: 13px;
-      box-shadow: 0 10px 18px rgba(0, 0, 0, 0.05);
-      transition: transform 140ms ease, box-shadow 140ms ease;
-    }
-    .intro-link:hover { transform: translateY(-1px); box-shadow: 0 12px 22px rgba(0, 0, 0, 0.08); }
-    .intro-btn {
-      background: linear-gradient(135deg, var(--green), var(--green-dark));
-      color: var(--white);
-      border: none;
-      border-radius: 16px;
-      padding: 14px 20px;
-      font-weight: 800;
-      font-size: 14px;
-      cursor: pointer;
-      box-shadow: 0 16px 28px rgba(21, 128, 61, 0.25);
-      transition: transform 140ms ease, box-shadow 140ms ease;
-      animation: pulse 2.6s ease-in-out infinite;
-      position: absolute;
-      bottom: 16px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 2;
-    }
-    .intro-btn:active { transform: translateX(-50%) translateY(1px); box-shadow: 0 10px 20px rgba(21, 128, 61, 0.25); }
-    .intro-screen.hidden { opacity: 0; pointer-events: none; }
-
-    @keyframes pulse {
-      0% { box-shadow: 0 14px 26px rgba(21, 128, 61, 0.25); }
-      50% { box-shadow: 0 18px 32px rgba(21, 128, 61, 0.32); }
-      100% { box-shadow: 0 14px 26px rgba(21, 128, 61, 0.25); }
-    }
-    @keyframes floaty {
-      from { transform: translateY(0px) scale(1); }
-      to { transform: translateY(-6px) scale(1.02); }
-    }
-    @keyframes welcome-pop {
-      0% { transform: scale(0.7); opacity: 0; text-shadow: 0 0 0 rgba(21,128,61,0.0); }
-      40% { transform: scale(1.12); opacity: 1; text-shadow: 0 10px 24px rgba(21,128,61,0.28); }
-      70% { transform: scale(1.0); opacity: 1; text-shadow: 0 6px 18px rgba(21,128,61,0.18); }
-      100% { transform: scale(1.0); opacity: 0; text-shadow: 0 0 0 rgba(21,128,61,0.0); }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
-    }
-
-    /* Bilgi blokları */
-    .info-section {
-      background: rgba(21, 128, 61, 0.05);
-      border: 1px solid rgba(21, 128, 61, 0.08);
-      border-radius: 18px;
-      padding: 18px 16px;
-      margin-top: 18px;
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
-    }
-    .info-section h2 {
-      margin: 0 0 10px;
-      font-size: 18px;
-      color: var(--green-dark);
-      letter-spacing: 0.2px;
-      text-align: center;
-    }
-    .info-section p {
-      margin: 0;
-      font-size: 14px;
-      color: #1f2937;
-      line-height: 1.6;
-      text-align: center;
-    }
-
-    .hours-card {
-      display: grid;
-      gap: 8px;
-      background: var(--white);
-      border: 1px solid rgba(21, 128, 61, 0.08);
-      border-radius: 14px;
-      padding: 12px;
-      margin-top: 10px;
-      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.05);
-      max-width: 420px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .hours-row {
-      display: flex;
-      justify-content: space-between;
-      font-size: 14px;
-      color: #0f172a;
-      gap: 8px;
-    }
-    .hours-row strong { color: var(--green-dark); font-weight: 800; }
-
-    .contact-grid {
-      display: grid;
-      gap: 10px;
-      margin-top: 10px;
-    }
-    .contact-item {
-      display: grid;
-      grid-template-columns: 36px 1fr;
-      align-items: center;
-      gap: 10px;
-      background: var(--white);
-      border: 1px solid rgba(21, 128, 61, 0.08);
-      border-radius: 12px;
-      padding: 10px;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
-    }
-    .contact-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 12px;
-      background: rgba(34, 197, 94, 0.14);
-      display: grid;
-      place-items: center;
-      color: var(--green-dark);
-      font-weight: 800;
-      font-size: 12px;
-    }
-    .contact-text {
-      display: grid;
-      gap: 2px;
-      font-size: 13px;
-      color: #1f2937;
-    }
-    .contact-text strong { color: var(--green-dark); font-size: 13px; }
-
-    .map-btn {
-      margin-top: 8px;
-      background: linear-gradient(135deg, var(--green), var(--green-dark));
-      color: var(--white);
-      border: none;
-      border-radius: 12px;
-      padding: 10px 14px;
-      font-weight: 700;
-      font-size: 13px;
-      cursor: pointer;
-      box-shadow: 0 12px 20px rgba(21, 128, 61, 0.22);
-      transition: transform 120ms ease, box-shadow 120ms ease;
-      width: fit-content;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .map-btn:active { transform: translateY(1px); box-shadow: 0 10px 16px rgba(21, 128, 61, 0.2); }
-
-    /* Çalışan paneli */
-    .staff-entry {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      border: 1px solid rgba(21, 128, 61, 0.16);
-      background: linear-gradient(135deg, var(--green), var(--green-dark));
-      color: var(--white);
-      padding: 10px 14px;
-      border-radius: 14px;
-      font-weight: 800;
-      font-size: 12px;
-      cursor: pointer;
-      box-shadow: 0 14px 22px rgba(0, 0, 0, 0.12);
-      transition: transform 140ms ease, box-shadow 140ms ease;
-    }
-    .staff-entry:hover { transform: translateY(-1px); box-shadow: 0 16px 26px rgba(0, 0, 0, 0.14); }
-    .staff-fab {
-      position: fixed;
-      right: 14px;
-      bottom: 18px;
-      z-index: 30;
-    }
-
-    .staff-screen {
-      position: fixed;
-      inset: 0;
-      z-index: 40;
-      background: linear-gradient(160deg, #f2fbf5 0%, #e7f7ed 50%, #f8fffa 100%);
-      display: none;
-      overflow-y: auto;
-      padding: 20px 16px 32px;
-    }
-    .staff-screen.active { display: block; }
-
-    .staff-panel {
-      background: #f5fbf7;
-      border: 1px solid rgba(21, 128, 61, 0.14);
-      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.14);
-      padding: 16px;
-      display: grid;
-      gap: 12px;
-      border-radius: 18px;
-      max-width: 520px;
-      margin: 0 auto;
-    }
-    .staff-panel h3 {
-      margin: 0;
-      font-size: 15px;
-      color: var(--green-dark);
-      letter-spacing: 0.2px;
-    }
-    .staff-form {
-      display: grid;
-      gap: 10px;
-    }
-    .staff-row { display: grid; gap: 6px; }
-    .staff-label { font-size: 12px; font-weight: 700; color: #0f172a; }
-    .staff-select, .staff-input, .staff-textarea {
-      width: 100%;
-      border-radius: 12px;
-      border: 1px solid rgba(21, 128, 61, 0.2);
-      padding: 10px;
-      font-size: 13px;
-      font-family: inherit;
-      background: #ffffff;
-    }
-    .staff-textarea { min-height: 70px; resize: vertical; }
-    .staff-actions { display: flex; justify-content: space-between; gap: 10px; align-items: center; flex-wrap: wrap; }
-    .staff-btn {
-      background: linear-gradient(135deg, var(--green), var(--green-dark));
-      color: var(--white);
-      border: none;
-      border-radius: 12px;
-      padding: 10px 14px;
-      font-weight: 800;
-      cursor: pointer;
-      box-shadow: 0 10px 20px rgba(21, 128, 61, 0.22);
-    }
-    .staff-close {
-      background: rgba(21, 128, 61, 0.08);
-      color: var(--green-dark);
-      border: 1px solid rgba(21, 128, 61, 0.2);
-    }
-    .staff-danger {
-      background: linear-gradient(135deg, #f87171, #dc2626);
-      color: #fff;
-      border: none;
-      box-shadow: 0 10px 20px rgba(220, 38, 38, 0.25);
-    }
-    .staff-switch {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 12px;
-      color: #0f172a;
-    }
-    .staff-status {
-      font-size: 12px;
-      color: var(--green-dark);
-      font-weight: 700;
-    }
-
-    @media (min-width: 720px) {
-      .staff-panel { width: 480px; margin: 0 auto; left: 0; right: 0; border-radius: 14px 14px 0 0; }
-    }
-
-    .lock-row {
-      display: grid;
-      gap: 10px;
-      background: rgba(21, 128, 61, 0.06);
-      border: 1px solid rgba(21, 128, 61, 0.14);
-      border-radius: 12px;
-      padding: 12px;
-      max-width: 420px;
-      margin: 0 auto 16px;
-    }
-    .lock-input {
-      width: 100%;
-      border-radius: 10px;
-      border: 1px solid rgba(21, 128, 61, 0.2);
-      padding: 10px;
-      font-size: 13px;
-      font-family: inherit;
-      background: #ffffff;
-    }
-    .lock-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-    .lock-status { font-size: 12px; color: #0f172a; font-weight: 700; }
-
-    .img-preview {
-      border: 1px dashed rgba(21, 128, 61, 0.2);
-      border-radius: 12px;
-      padding: 10px;
-      background: rgba(21, 128, 61, 0.04);
-      font-size: 12px;
-      color: #0f172a;
-      display: grid;
-      place-items: center;
-      min-height: 120px;
-      text-align: center;
-    }
-    .img-preview img {
-      max-width: 160px;
-      max-height: 140px;
-      border-radius: 10px;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.08);
-      object-fit: cover;
-    }
-  </style>
+    .navbar .brand { width: 100%; justify-content: flex-start; }
+    .navbar-links { width: 100%; justify-content: flex-start; gap: 10px; }
+    .navbar a { font-size: 13px; }
+    .hero { padding: 42px 16px; }
+    .hero h1 { font-size: 32px; }
+    .features { padding: 40px 12px; }
+    .menu { padding: 40px 12px; }
+    .menu-items { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+    .feature-card { padding: 22px; }
+  }
+</style>
 </head>
+
 <body>
-  <div class="leafy leafy-top" aria-hidden="true"></div>
-  <div class="leafy leafy-bottom" aria-hidden="true"></div>
 
-  <div class="intro-screen" id="introScreen">
-    <div class="intro-visual">
-      <div class="leaf-spray" aria-hidden="true" style="opacity:0.55"></div>
-      <div class="intro-glow one" aria-hidden="true"></div>
-      <div class="intro-glow two" aria-hidden="true"></div>
-      <div class="intro-hero">
-        <div class="intro-ring">
-          <img src="logo.png" alt="Green Light Cafe logosu" class="intro-logo">
-        </div>
-        <div class="intro-welcome">HOŞ GELDİNİZ</div>
-        <div class="intro-brand">Green Light Cafe</div>
-        <div class="intro-sub">Ferah, yeşil ve ışık dolu seçimler.</div>
-        <div class="intro-links">
-          <a class="intro-link" href="#hakkimizda">Hakkımızda</a>
-          <a class="intro-link" href="#iletisim">İletişim</a>
-        </div>
-      </div>
-      <button class="intro-btn" id="startMenu">Menüyü Gör</button>
-    </div>
+<!-- NAVBAR -->
+<div class="navbar">
+  <div class="brand">
+    <img src="logo.png" alt="Green Light logosu" class="brand-logo">
+    <span>GREEN LIGHT</span>
   </div>
-
-  <div class="notice">Tarifeler her gün güncellenir, kasadaki fiyatlar geçerlidir.</div>
-
-  <main class="page">
-    <div class="brand" aria-label="Greenlight logo">
-      <img src="logo.png" alt="Green Light Cafe logosu" class="brand-logo">
-      <div class="brand-name">Green Light Cafe</div>
-    </div>
-    <nav class="nav-links" aria-label="Ana menü">
-      <a href="#hakkimizda">Hakkımızda</a>
-      <a href="#iletisim">İletişim</a>
-    </nav>
-
-    <p class="intro">
-      Doğaya saygılı, ferah ve ışık dolu lezzetler. QR menümüzden sürdürülebilir seçimleri keşfedin.
-    </p>
-
-    <section class="ai-box" aria-label="Yapay zeka öneri motoru">
-      <div class="leaf-spray" aria-hidden="true" style="opacity:0.4"></div>
-      <div class="ai-head">
-        <div class="ai-icon" aria-hidden="true">✨</div>
-        <div>
-          <div class="ai-title">Greenlight Öneri Motoru</div>
-          <div class="ai-sub">Ruh hâline göre sana özel 3 öneri</div>
-        </div>
-      </div>
-      <div class="ai-moods" role="list">
-        <button class="chip" data-mood="rahat">Rahatlamak</button>
-        <button class="chip" data-mood="enerji">Enerji toplamak</button>
-        <button class="chip" data-mood="hafif">Hafif ve fit</button>
-        <button class="chip" data-mood="tatli">Tatlı isteği</button>
-        <button class="chip" data-mood="paylas">Paylaşmalık</button>
-        <button class="chip" data-mood="klasik">Klasik seçim</button>
-      </div>
-      <div class="ai-actions">
-        <button id="aiSuggest" class="ai-btn">Önerileri Göster</button>
-        <div class="ai-hint">Seçtiğin ruh hâline uygun menüden seçenekler çıkar.</div>
-      </div>
-      <div class="ai-results" id="aiResults" aria-live="polite"></div>
-    </section>
-
-    <section class="menu" id="menuContainer"></section>
-
-    <section class="info-section" id="hakkimizda">
-      <h2>Hakkımızda</h2>
-      <p>Greenlight, doğaya saygılı, üçüncü nesil kahve ve sıcak kahvaltı seçenekleriyle misafirlerine ferah bir ortam sunan bir kafedir. Yerel ve taze ürünler kullanmaya özen gösteririz.</p>
-    </section>
-
-    <section class="info-section">
-      <h2>Çalışma Saatlerimiz</h2>
-      <div class="hours-card" aria-label="Çalışma saatleri">
-        <div class="hours-row"><strong>Pazartesi–Cuma</strong><span>08:00–00:00</span></div>
-        <div class="hours-row"><strong>Cumartesi–Pazar</strong><span>08:00–00:00</span></div>
-      </div>
-    </section>
-
-    <section class="info-section" id="iletisim">
-      <h2>İletişim</h2>
-      <div class="contact-grid">
-        <div class="contact-item">
-          <div class="contact-icon">AD</div>
-          <div class="contact-text">
-            <strong>Adres</strong>
-            <span>Greenlight Cafe – Paşakonak Mah. 18033 Sk. 11/A Bandırma</span>
-          </div>
-        </div>
-        <div class="contact-item">
-          <div class="contact-icon">TL</div>
-          <div class="contact-text">
-            <strong>Telefon</strong>
-            <span>0 (266) 000 00 00</span>
-          </div>
-        </div>
-        <div class="contact-item">
-          <div class="contact-icon">WA</div>
-          <div class="contact-text">
-            <strong>WhatsApp</strong>
-            <span>0 (5xx) 000 00 00</span>
-          </div>
-        </div>
-        <div class="contact-item">
-          <div class="contact-icon">E</div>
-          <div class="contact-text">
-            <strong>E-posta</strong>
-            <span>info@greenlight.com</span>
-          </div>
-        </div>
-      </div>
-      <a class="map-btn" href="https://maps.google.com" target="_blank" rel="noopener">Konumu Aç</a>
-    </section>
-  </main>
-
-  <button class="staff-entry staff-fab" id="staffEntry" aria-label="Çalışan girişi">Çalışan Girişi</button>
-
-  <div class="staff-screen" id="staffScreen" aria-hidden="true">
-    <div class="lock-row" id="staffAuth">
-      <div class="staff-label">Çalışan girişi</div>
-      <input class="lock-input" id="staffPass" type="password" placeholder="Şifreyi girin">
-      <div class="lock-actions">
-        <button type="button" class="staff-btn" id="staffUnlock">Giriş yap</button>
-        <button type="button" class="staff-btn staff-close" id="staffExit">Kapat</button>
-        <span class="lock-status" id="lockStatus">Kilidi açmak için şifre girin.</span>
-      </div>
-    </div>
-    <div class="staff-panel" id="staffPanel" aria-hidden="true">
-      <h3>Fiyat / Ürün Güncelle</h3>
-      <form class="staff-form" id="staffForm">
-        <div class="staff-row">
-          <label class="staff-label" for="staffCategory">Kategori</label>
-          <select class="staff-select" id="staffCategory"></select>
-        </div>
-        <div class="staff-row">
-          <label class="staff-label" for="staffItem">Ürün</label>
-          <select class="staff-select" id="staffItem"></select>
-        </div>
-        <div class="staff-row staff-switch">
-          <label for="staffNew">Yeni ürün ekle</label>
-          <input type="checkbox" id="staffNew">
-        </div>
-        <div class="staff-row">
-          <label class="staff-label" for="staffName">Ürün Adı</label>
-          <input class="staff-input" id="staffName" type="text" required>
-        </div>
-        <div class="staff-row">
-          <label class="staff-label" for="staffPrice">Fiyat</label>
-          <input class="staff-input" id="staffPrice" type="text" required>
-        </div>
-        <div class="staff-row">
-          <label class="staff-label" for="staffImgFile">Görsel Yükle (opsiyonel)</label>
-          <input class="staff-input" id="staffImgFile" type="file" accept="image/*">
-          <div class="img-preview" id="staffImgPreview">Henüz görsel seçilmedi</div>
-        </div>
-        <div class="staff-row">
-          <label class="staff-label" for="staffDesc">Açıklama</label>
-          <textarea class="staff-textarea" id="staffDesc" placeholder="Opsiyonel"></textarea>
-        </div>
-        <div class="staff-actions">
-          <button type="submit" class="staff-btn">Kaydet</button>
-          <button type="button" class="staff-btn staff-danger" id="staffDelete">Ürünü Sil</button>
-          <button type="button" class="staff-btn staff-close" id="staffClose">Çıkış</button>
-          <span class="staff-status" id="staffStatus"></span>
-        </div>
-      </form>
-    </div>
+  <div class="navbar-links">
+    <a href="#menu">Menü</a>
+    <a href="#about">Hakkımızda</a>
+    <a href="#contact">İletişim</a>
   </div>
+</div>
 
-  <footer class="footer">
-    <div class="slogan">Greenlight • Doğaya saygılı, ışığı takip et.</div>
-    <div class="footer-social">
-      <h4>Bizi Takip Edin</h4>
-      <div class="social">
-        <a href="#" aria-label="Instagram">IG</a>
-        <a href="#" aria-label="WhatsApp">WA</a>
-      </div>
-    </div>
-  </footer>
+<!-- HERO -->
+<div class="hero">
+  <h1>Green Light Coffee & Breakfast</h1>
+  <p>Bandırma’nın yeni nesil kahve ve kahvaltı deneyimi.</p>
+  <a class="btn" href="#menu">Menüyü Gör</a>
+</div>
 
-  <script>
-    const moodChips = document.querySelectorAll('.chip');
-    let activeMood = '';
+<!-- FEATURES -->
+<div class="features">
+  <div class="feature-card">
+    <h3>Yapay Zekâ Destekli Menüler</h3>
+    <p>Müşterilerin zevklerine göre akıllı öneriler sunan modern dijital menü altyapısı.</p>
+  </div>
+  <div class="feature-card">
+    <h3>Taze Kahve & Özel Kahvaltı</h3>
+    <p>Günlük kavrulmuş kahveler ve özenle hazırlanan Green Light kahvaltı tabakları.</p>
+  </div>
+  <div class="feature-card">
+    <h3>QR Menü ile Hız</h3>
+    <p>Menüyü anında görüntüleyin, siparişi hızlıca verin — temassız, modern ve şık.</p>
+  </div>
+</div>
 
+<!-- MENU -->
+<div id="menu" class="menu">
+  <h2>Menümüz</h2>
+  <p>Fiyatlar günceldir, afiyet olsun!</p>
+  <div class="menu-filter">
+    <select id="categoryFilter" class="menu-select" aria-label="Kategori seç">
+      <option value="all">Tüm Kategoriler</option>
+    </select>
+  </div>
+  <div id="menu-list"></div>
+</div>
 
-    const menuData = [
-  { name: 'Serpme Kahvaltı (2 kişilik)', price: '700 ₺', desc: 'Taze peynir çeşitleri, sekiz çeşit sürülebilir ürünleriyle, yeşillik tabağı, omlet/menemen seçeneği, çıtır patates sosis ve sigara böreği ile sınırsız çayla içiniz ısıtacak bir serpme kahvaltı Green Light ailesinden. AFİYETLE!', moods: ['paylas', 'klasik'], category: 'Kahvaltı' },
-  { name: 'Simit Tabağı', price: '110 ₺', desc: 'Sıcacık simit yanında peynir, zeytin, salam taptaze yeşilliklerle güne hafif ama lezzetli bir başlangıç. Bir fincan çay da bizden. AFİYETLE!', moods: ['klasik', 'rahat'], category: 'Kahvaltı' },
-  { name: 'Menemen', price: '100 ₺', desc: 'Taze domates ve biber ile yapılmış bol kaşarlı Türk mutfağının vazgeçilmezi. AFİYETLE!', moods: ['enerji', 'klasik'], category: 'Sahanda & Tavada' },
-  { name: 'Sade Omlet', price: '75 ₺', desc: 'Sade omlet. AFİYETLE!', moods: ['hafif', 'klasik'], category: 'Sahanda & Tavada' },
-  { name: 'Sebzeli Omlet', price: '100 ₺', desc: 'Kapya biber, yeşil biber, maydonozun buluşması. AFİYETLE!', moods: ['hafif'], category: 'Sahanda & Tavada' },
-  { name: 'Kaşarlı Omlet', price: '100 ₺', desc: 'KAŞARLI OMLET 100 ₺', moods: ['klasik'], category: 'Sahanda & Tavada' },
-  { name: 'Beyaz Peynirli Omlet', price: '100 ₺', desc: 'BEYAZ PEYNİRLİ OMLET 100 ₺', moods: ['klasik'], category: 'Sahanda & Tavada' },
-  { name: 'Sucuklu Yumurta', price: '150 ₺', desc: 'Tereyağında pişen yumurta ve nefis sucuk dilimlerinin eşsiz buluşması. Kahvaltının vazgeçilmez klasiği. AFİYETLE!', moods: ['enerji'], category: 'Sahanda & Tavada' },
-  { name: 'Sahanda Sucuk', price: '120 ₺', desc: 'Tavada özenle kızartılan aromatik sucuk dilimleri, nefis kokusuyla servis edilir. AFİYETLE!', moods: ['enerji', 'klasik'], category: 'Sahanda & Tavada' },
-  { name: 'Çıtır Sepet', price: '200 ₺', desc: 'Çıtır sevenler burada mı? Patates kızartması, soğan halkası, sigara böreği, sosis ve çıtır tavuk bir sepette buluştu: tam paylaşmalık. AFİYETLE!', moods: ['paylas', 'enerji'], category: 'Atıştırmalıklar' },
-  { name: 'Patates Kızartması (K)', price: '60 ₺', desc: 'KÜÇÜK BOY: 60 ₺', moods: ['paylas', 'klasik'], category: 'Atıştırmalıklar' },
-  { name: 'Patates Kızartması (O)', price: '85 ₺', desc: 'ORTA BOY: 85 ₺', moods: ['paylas', 'klasik'], category: 'Atıştırmalıklar' },
-  { name: 'Patates Kızartması (B)', price: '120 ₺', desc: 'BÜYÜK BOY: 120 ₺', moods: ['paylas'], category: 'Atıştırmalıklar' },
-  { name: 'Sigara Böreği', price: '100 ₺', desc: 'İncecik, lor ve kaşar peyniriyle hazırlanmış çıtır börekler. AFİYETLE!', moods: ['paylas'], category: 'Atıştırmalıklar' },
-  { name: 'Kaşarlı Tost', price: '110 ₺', desc: 'İki dilim arasında bolca eriyen, uzayan lezzet. AFİYETLE!', moods: ['klasik'], category: 'Tostlar' },
-  { name: 'Karışık Tost', price: '140 ₺', desc: 'Sucuk severlerin favorisi! Sucuk ve kaşar peynirinin mükemmel buluşması. AFİYETLE!', moods: ['enerji'], category: 'Tostlar' },
-  { name: 'Sucuklu Tost', price: '120 ₺', desc: 'Kaşarsız, tamamen sucuk odaklı lezzet. AFİYETLE!', moods: ['enerji', 'klasik'], category: 'Tostlar' },
-  { name: 'Bazlama Tost', price: '150 ₺', desc: 'Taş fırın lezzetinde bazlama ekmeği, sucuk, kaşar peynir, sosis ve acukanın buluşması. AFİYETLE!', moods: ['paylas', 'klasik'], category: 'Tostlar' },
-  { name: 'Pesto Soslu Tost', price: '130 ₺', desc: 'Fesleğenin başrolde olduğu, özel pesto sosuyla marine edilmiş kaşar peynirleri çıtır ekmek arasında. AFİYETLE!', moods: ['hafif'], category: 'Tostlar' },
-  { name: 'Kaşarlı Gözleme', price: '110 ₺', desc: 'Eritilmiş kaşar peyniri ve çıtır yufkasıyla sade lezzet arayanlara. AFİYETLE!', moods: ['klasik'], category: 'Gözlemeler' },
-  { name: 'Patates-Kaşarlı Gözleme', price: '130 ₺', desc: 'Yumuşak, baharatlı patates ezmesi ve eriyen kaşar peyniri. AFİYETLE!', moods: ['enerji'], category: 'Gözlemeler' },
-  { name: 'Ispanak-Kaşarlı Gözleme', price: '130 ₺', desc: 'Taptaze ıspanak yaprakları ve eriyen kaşar peyniri. AFİYETLE!', moods: ['hafif'], category: 'Gözlemeler' },
-  { name: 'Mantar-Kaşarlı Gözleme', price: '130 ₺', desc: 'Lezzetli kültür mantarı ve bol kaşar peyniri. AFİYETLE!', moods: ['hafif'], category: 'Gözlemeler' },
-  { name: 'Sucuk-Kaşarlı Gözleme', price: '170 ₺', desc: 'Özel sucuk dilimleri ve kaşar peynirinin muhteşem buluşması. AFİYETLE!', moods: ['enerji'], category: 'Gözlemeler' },
-  { name: 'Pizza Gözleme', price: '200 ₺', desc: 'Pizzanın tüm malzemeleri, hafif doyurucu ve çok lezzetli. AFİYETLE!', moods: ['enerji', 'paylas'], category: 'Gözlemeler' },
-  { name: 'Köri Soslu Tavuklu Penne', price: '250 ₺', desc: 'Kremalı köri sosuyla hazırlanmış tavuk. Yumuşak, sıcak ve dengeli bir lezzet. AFİYETLE!', moods: ['enerji'], category: 'Makarnalar' },
-  { name: 'Fettuccine Alfredo', price: '250 ₺', desc: 'İtalyan mutfağının en zarif şerit makarnası… sotelenmiş mantar ve tavuk ile ipeksi makarna. AFİYETLE!', moods: ['klasik'], category: 'Makarnalar' },
-  { name: 'Kremalı Mantarlı Makarna', price: '250 ₺', desc: 'Renkli biberler, sotelenmiş mantarların özel sosla birleştiği makarna deneyimi. AFİYETLE!', moods: ['rahat'], category: 'Makarnalar' },
-  { name: 'Hamburger', price: '240 ₺', desc: 'Lezzetli ızgara köfte, taze marul domates ve özel sosla hazırlanır. Klasik tadın keyfini çıkarın. AFİYETLE!', moods: ['enerji', 'klasik'], category: 'Ana Yemekler' },
-  { name: 'Cheeseburger', price: '260 ₺', desc: 'Erimiş peynirle buluşan ızgara köfte, taptaze sebzeler ve özel soslarla hazırlanan damak çatlatan lezzet. AFİYETLE!', moods: ['enerji', 'klasik'], category: 'Ana Yemekler' },
-  { name: 'Tavuk Schnitzel', price: '250 ₺', desc: 'Çıtır dışı, yumuşacık tavuk fileto, özel baharatlarla lezzetlendirilmiş nefis bir klasik. AFİYETLE!', moods: ['enerji'], category: 'Ana Yemekler' },
-  { name: 'Tavuk Wrap', price: '230 ₺', desc: 'Sote tavuk, taze sebzelerle tortilla arasında buluştuğu pratik ve lezzetli seçenek. AFİYETLE!', moods: ['hafif', 'enerji'], category: 'Ana Yemekler' },
-  { name: 'Ton Balıklı Salata', price: '200 ₺', desc: 'Taze yeşillikler, mısır ve ton balığının doyurucu lezzeti ile sizlerle. AFİYETLE!', moods: ['hafif'], category: 'Salatalar' },
-  { name: 'Sezar Salata', price: '200 ₺', desc: 'Çıtır marul yaprakları, özenle hazırlanmış sezar sosuyla tavuğun buluşması. AFİYETLE!', moods: ['hafif', 'klasik'], category: 'Salatalar' },
-  { name: 'Hellim Peynirli Salata', price: '170 ₺', desc: 'Izgara hellim peynir ve taptaze yeşilliklerle hazırlanan hafif ve lezzetli salata. AFİYETLE!', moods: ['hafif'], category: 'Salatalar' },
-  { name: 'İçli Köfte (Kıymalı-Cevizli) 3 Adet', price: '240 ₺', desc: 'Özenle yoğrulmuş, baharatlarla harmanlanmış kıyma ve ceviz dolgusuyla hazırlanmış enfes köfte. AFİYETLE!', moods: ['enerji'], category: 'Anne Eli Ürünleri' },
-  { name: 'İçli Köfte (Patatesli) 3 Adet', price: '200 ₺', desc: 'Lezzetli patates püresiyle doldurulmuş, dışı çıtır, içi yumuşacık köfte. AFİYETLE!', moods: ['hafif'], category: 'Anne Eli Ürünleri' },
-  { name: 'Yaprak Sarma (Haftasonu)', price: '220 ₺', desc: 'Asma yaprağının içinde pirinç, baharat ve hafif zeytinyağıyla sarılmış ev yapımı sarma. AFİYETLE!', moods: ['hafif', 'rahat'], category: 'Anne Eli Ürünleri' },
-  { name: 'San Sebastian', price: '180 ₺', desc: 'Çıtır kabuğu, yumuşacık iç dokusuyla Belçika çikolatasının muhteşem uyumu. AFİYETLE!', moods: ['tatli'], category: 'Tatlılar' },
-  { name: 'Limonlu Cheesecake', price: '180 ₺', desc: 'Ferahlık veren limon aroması ve kremsi peynirin mükemmel uyumu. Hafif ve taze bir tatlı deneyimi. AFİYETLE!', moods: ['tatli'], category: 'Tatlılar' },
-  { name: 'Çilekli Magnolia', price: '180 ₺', desc: 'Kat kat lezzet! Taze çilek ve kremanın buluştuğu hafif ve nefis magnolia. AFİYETLE!', moods: ['tatli', 'hafif'], category: 'Tatlılar' },
-  { name: 'Karamelli Trileçe', price: '180 ₺', desc: 'Tatlı karamelin zenginliği ile yumuşak ve sütlü lezzet. AFİYETLE!', moods: ['tatli', 'rahat'], category: 'Tatlılar' },
-  { name: 'Frambuazlı Trileçe', price: '180 ₺', desc: 'Ferah frambuazın hafif ekşiliği bir arada… yumuşak ve sütlü lezzet. AFİYETLE!', moods: ['tatli', 'hafif'], category: 'Tatlılar' },
-  { name: 'Tiramisu', price: '160 ₺', desc: 'Kahve aromalı, mascarpone kreması ve kakaonun mükemmel uyumu ile İtalyan klasik tatlısı. AFİYETLE!', moods: ['tatli', 'rahat'], category: 'Tatlılar' },
-  { name: 'Fransız Ekler', price: '180 ₺', desc: 'Özel hamuru, krema dolgusu ve Belçika çikolatasının muhteşem lezzeti. AFİYETLE!', moods: ['tatli'], category: 'Tatlılar' },
-  { name: 'Ajda', price: '200 ₺', desc: 'Meyve, krema ve çikolatanın buluşmuş en güzel hali. Taze çilek, muz, krep kırığı ve Belçika çikolatası. AFİYETLE!', moods: ['tatli'], category: 'Tatlılar' },
-];
+<!-- ABOUT -->
+<div id="about" class="about">
+  <h2>Hakkımızda</h2>
+  <p>
+    Green Light Coffee & Breakfast, Bandırma’da üçüncü nesil kahve kültürünü modern kahvaltı anlayışıyla birleştiren
+    yenilikçi bir mekândır. Sürdürülebilir kalite ve içten atmosferiyle misafirlerine rahat bir deneyim sunmayı amaçlar.
+  </p>
+</div>
 
+<!-- CONTACT -->
+<div id="contact" class="contact">
+  <h2>İletişim</h2>
+  <p>Adres: Bandırma, Atatürk Caddesi</p>
+  <p>Telefon: 0 555 555 55 55</p>
+</div>
 
-    const categories = ['Kahvaltı', 'Sahanda & Tavada', 'Atıştırmalıklar', 'Tostlar', 'Gözlemeler', 'Makarnalar', 'Ana Yemekler', 'Salatalar', 'Anne Eli Ürünleri', 'Tatlılar'];
-    const menuContainer = document.getElementById('menuContainer');
+<!-- FOOTER -->
+<div class="footer">
+  © 2025 Green Light Coffee — Bandırma
+</div>
 
-    const staffPanel = document.getElementById('staffPanel');
-    const staffScreen = document.getElementById('staffScreen');
-    const staffEntry = document.getElementById('staffEntry');
-    const staffClose = document.getElementById('staffClose');
-    const staffExit = document.getElementById('staffExit');
-    const staffCategory = document.getElementById('staffCategory');
-    const staffItem = document.getElementById('staffItem');
-    const staffName = document.getElementById('staffName');
-    const staffPrice = document.getElementById('staffPrice');
-    const staffDesc = document.getElementById('staffDesc');
-    const staffImgFile = document.getElementById('staffImgFile');
-    const staffImgPreview = document.getElementById('staffImgPreview');
-    const staffImgClear = document.getElementById('staffImgClear');
-    const staffForm = document.getElementById('staffForm');
-    const staffNew = document.getElementById('staffNew');
-    const staffStatus = document.getElementById('staffStatus');
-    const staffDelete = document.getElementById('staffDelete');
-    const staffPass = document.getElementById('staffPass');
-    const staffUnlock = document.getElementById('staffUnlock');
-    const lockStatus = document.getElementById('lockStatus');
-    let isUnlocked = false;
-    const STAFF_HASH = '65a9609af35cdcca66ef9f36455913de166721a8611f533eac41b940846af46b'; // sha256("green123")
-    let currentImgData = '';
+<script>
+  const menuData = [
+    { name: 'Serpme Kahvaltı (2 kişilik)', price: '700 ₺', desc: 'Taze peynir çeşitleri, sekiz çeşit sürülebilir ürünleriyle, yeşillik tabağı, omlet/menemen seçeneği, çıtır patates sosis ve sigara böreği ile sınırsız çayla içiniz ısıtacak bir serpme kahvaltı Green Light ailesinden. AFİYETLE!', moods: ['paylas', 'klasik'], category: 'Kahvaltı' },
+    { name: 'Simit Tabağı', price: '110 ₺', desc: 'Sıcacık simit yanında peynir, zeytin, salam taptaze yeşilliklerle güne hafif ama lezzetli bir başlangıç. Bir fincan çay da bizden. AFİYETLE!', moods: ['klasik', 'rahat'], category: 'Kahvaltı' },
+    { name: 'Menemen', price: '100 ₺', desc: 'Taze domates ve biber ile yapılmış bol kaşarlı Türk mutfağının vazgeçilmezi. AFİYETLE!', moods: ['enerji', 'klasik'], category: 'Sahanda & Tavada' },
+    { name: 'Sade Omlet', price: '75 ₺', desc: 'Sade omlet. AFİYETLE!', moods: ['hafif', 'klasik'], category: 'Sahanda & Tavada' },
+    { name: 'Sebzeli Omlet', price: '100 ₺', desc: 'Kapya biber, yeşil biber, maydonozun buluşması. AFİYETLE!', moods: ['hafif'], category: 'Sahanda & Tavada' },
+    { name: 'Kaşarlı Omlet', price: '100 ₺', desc: 'KAŞARLI OMLET 100 ₺', moods: ['klasik'], category: 'Sahanda & Tavada' },
+    { name: 'Beyaz Peynirli Omlet', price: '100 ₺', desc: 'BEYAZ PEYNİRLİ OMLET 100 ₺', moods: ['klasik'], category: 'Sahanda & Tavada' },
+    { name: 'Sucuklu Yumurta', price: '150 ₺', desc: 'Tereyağında pişen yumurta ve nefis sucuk dilimlerinin eşsiz buluşması. Kahvaltının vazgeçilmez klasiği. AFİYETLE!', moods: ['enerji'], category: 'Sahanda & Tavada' },
+    { name: 'Sahanda Sucuk', price: '120 ₺', desc: 'Tavada özenle kızartılan aromatik sucuk dilimleri, nefis kokusuyla servis edilir. AFİYETLE!', moods: ['enerji', 'klasik'], category: 'Sahanda & Tavada' },
+    { name: 'Çıtır Sepet', price: '200 ₺', desc: 'Çıtır sevenler burada mı? Patates kızartması, soğan halkası, sigara böreği, sosis ve çıtır tavuk bir sepette buluştu: tam paylaşmalık. AFİYETLE!', moods: ['paylas', 'enerji'], category: 'Atıştırmalıklar' },
+    { name: 'Patates Kızartması (K)', price: '60 ₺', desc: 'KÜÇÜK BOY: 60 ₺', moods: ['paylas', 'klasik'], category: 'Atıştırmalıklar' },
+    { name: 'Patates Kızartması (O)', price: '85 ₺', desc: 'ORTA BOY: 85 ₺', moods: ['paylas', 'klasik'], category: 'Atıştırmalıklar' },
+    { name: 'Patates Kızartması (B)', price: '120 ₺', desc: 'BÜYÜK BOY: 120 ₺', moods: ['paylas'], category: 'Atıştırmalıklar' },
+    { name: 'Sigara Böreği', price: '100 ₺', desc: 'İncecik, lor ve kaşar peyniriyle hazırlanmış çıtır börekler. AFİYETLE!', moods: ['paylas'], category: 'Atıştırmalıklar' },
+    { name: 'Kaşarlı Tost', price: '110 ₺', desc: 'İki dilim arasında bolca eriyen, uzayan lezzet. AFİYETLE!', moods: ['klasik'], category: 'Tostlar' },
+    { name: 'Karışık Tost', price: '140 ₺', desc: 'Sucuk severlerin favorisi! Sucuk ve kaşar peynirinin mükemmel buluşması. AFİYETLE!', moods: ['enerji'], category: 'Tostlar' },
+    { name: 'Sucuklu Tost', price: '120 ₺', desc: 'Kaşarsız, tamamen sucuk odaklı lezzet. AFİYETLE!', moods: ['enerji', 'klasik'], category: 'Tostlar' },
+    { name: 'Bazlama Tost', price: '150 ₺', desc: 'Taş fırın lezzetinde bazlama ekmeği, sucuk, kaşar peynir, sosis ve acukanın buluşması. AFİYETLE!', moods: ['paylas', 'klasik'], category: 'Tostlar' },
+    { name: 'Pesto Soslu Tost', price: '130 ₺', desc: 'Fesleğenin başrolde olduğu, özel pesto sosuyla marine edilmiş kaşar peynirleri çıtır ekmek arasında. AFİYETLE!', moods: ['hafif'], category: 'Tostlar' },
+    { name: 'Kaşarlı Gözleme', price: '110 ₺', desc: 'Eritilmiş kaşar peyniri ve çıtır yufkasıyla sade lezzet arayanlara. AFİYETLE!', moods: ['klasik'], category: 'Gözlemeler' },
+    { name: 'Patates-Kaşarlı Gözleme', price: '130 ₺', desc: 'Yumuşak, baharatlı patates ezmesi ve eriyen kaşar peyniri. AFİYETLE!', moods: ['enerji'], category: 'Gözlemeler' },
+    { name: 'Ispanak-Kaşarlı Gözleme', price: '130 ₺', desc: 'Taptaze ıspanak yaprakları ve eriyen kaşar peyniri. AFİYETLE!', moods: ['hafif'], category: 'Gözlemeler' },
+    { name: 'Mantar-Kaşarlı Gözleme', price: '130 ₺', desc: 'Lezzetli kültür mantarı ve bol kaşar peyniri. AFİYETLE!', moods: ['hafif'], category: 'Gözlemeler' },
+    { name: 'Sucuk-Kaşarlı Gözleme', price: '170 ₺', desc: 'Özel sucuk dilimleri ve kaşar peynirinin muhteşem buluşması. AFİYETLE!', moods: ['enerji'], category: 'Gözlemeler' },
+    { name: 'Pizza Gözleme', price: '200 ₺', desc: 'Pizzanın tüm malzemeleri, hafif doyurucu ve çok lezzetli. AFİYETLE!', moods: ['enerji', 'paylas'], category: 'Gözlemeler' },
+    { name: 'Köri Soslu Tavuklu Penne', price: '250 ₺', desc: 'Kremalı köri sosuyla hazırlanmış tavuk. Yumuşak, sıcak ve dengeli bir lezzet. AFİYETLE!', moods: ['enerji'], category: 'Makarnalar' },
+    { name: 'Fettuccine Alfredo', price: '250 ₺', desc: 'İtalyan mutfağının en zarif şerit makarnası… sotelenmiş mantar ve tavuk ile ipeksi makarna. AFİYETLE!', moods: ['klasik'], category: 'Makarnalar' },
+    { name: 'Kremalı Mantarlı Makarna', price: '250 ₺', desc: 'Renkli biberler, sotelenmiş mantarların özel sosla birleştiği makarna deneyimi. AFİYETLE!', moods: ['rahat'], category: 'Makarnalar' },
+    { name: 'Hamburger', price: '240 ₺', desc: 'Lezzetli ızgara köfte, taze marul domates ve özel sosla hazırlanır. Klasik tadın keyfini çıkarın. AFİYETLE!', moods: ['enerji', 'klasik'], category: 'Ana Yemekler' },
+    { name: 'Cheeseburger', price: '260 ₺', desc: 'Erimiş peynirle buluşan ızgara köfte, taptaze sebzeler ve özel soslarla hazırlanan damak çatlatan lezzet. AFİYETLE!', moods: ['enerji', 'klasik'], category: 'Ana Yemekler' },
+    { name: 'Tavuk Schnitzel', price: '250 ₺', desc: 'Çıtır dışı, yumuşacık tavuk fileto, özel baharatlarla lezzetlendirilmiş nefis bir klasik. AFİYETLE!', moods: ['enerji'], category: 'Ana Yemekler' },
+    { name: 'Tavuk Wrap', price: '230 ₺', desc: 'Sote tavuk, taze sebzelerle tortilla arasında buluştuğu pratik ve lezzetli seçenek. AFİYETLE!', moods: ['hafif', 'enerji'], category: 'Ana Yemekler' },
+    { name: 'Ton Balıklı Salata', price: '200 ₺', desc: 'Taze yeşillikler, mısır ve ton balığının doyurucu lezzeti ile sizlerle. AFİYETLE!', moods: ['hafif'], category: 'Salatalar' },
+    { name: 'Sezar Salata', price: '200 ₺', desc: 'Çıtır marul yaprakları, özenle hazırlanmış sezar sosuyla tavuğun buluşması. AFİYETLE!', moods: ['hafif', 'klasik'], category: 'Salatalar' },
+    { name: 'Hellim Peynirli Salata', price: '170 ₺', desc: 'Izgara hellim peynir ve taptaze yeşilliklerle hazırlanan hafif ve lezzetli salata. AFİYETLE!', moods: ['hafif'], category: 'Salatalar' },
+    { name: 'İçli Köfte (Kıymalı-Cevizli) 3 Adet', price: '240 ₺', desc: 'Özenle yoğrulmuş, baharatlarla harmanlanmış kıyma ve ceviz dolgusuyla hazırlanmış enfes köfte. AFİYETLE!', moods: ['enerji'], category: 'Anne Eli Ürünleri' },
+    { name: 'İçli Köfte (Patatesli) 3 Adet', price: '200 ₺', desc: 'Lezzetli patates püresiyle doldurulmuş, dışı çıtır, içi yumuşacık köfte. AFİYETLE!', moods: ['hafif'], category: 'Anne Eli Ürünleri' },
+    { name: 'Yaprak Sarma (Haftasonu)', price: '220 ₺', desc: 'Asma yaprağının içinde pirinç, baharat ve hafif zeytinyağıyla sarılmış ev yapımı sarma. AFİYETLE!', moods: ['hafif', 'rahat'], category: 'Anne Eli Ürünleri' },
+    { name: 'San Sebastian', price: '180 ₺', desc: 'Çıtır kabuğu, yumuşacık iç dokusuyla Belçika çikolatasının muhteşem uyumu. AFİYETLE!', moods: ['tatli'], category: 'Tatlılar' },
+    { name: 'Limonlu Cheesecake', price: '180 ₺', desc: 'Ferahlık veren limon aroması ve kremsi peynirin mükemmel uyumu. Hafif ve taze bir tatlı deneyimi. AFİYETLE!', moods: ['tatli'], category: 'Tatlılar' },
+    { name: 'Çilekli Magnolia', price: '180 ₺', desc: 'Kat kat lezzet! Taze çilek ve kremanın buluştuğu hafif ve nefis magnolia. AFİYETLE!', moods: ['tatli', 'hafif'], category: 'Tatlılar' },
+    { name: 'Karamelli Trileçe', price: '180 ₺', desc: 'Tatlı karamelin zenginliği ile yumuşak ve sütlü lezzet. AFİYETLE!', moods: ['tatli', 'rahat'], category: 'Tatlılar' },
+    { name: 'Frambuazlı Trileçe', price: '180 ₺', desc: 'Ferah frambuazın hafif ekşiliği bir arada… yumuşak ve sütlü lezzet. AFİYETLE!', moods: ['tatli', 'hafif'], category: 'Tatlılar' },
+    { name: 'Tiramisu', price: '160 ₺', desc: 'Kahve aromalı, mascarpone kreması ve kakaonun mükemmel uyumu ile İtalyan klasik tatlısı. AFİYETLE!', moods: ['tatli', 'rahat'], category: 'Tatlılar' },
+    { name: 'Fransız Ekler', price: '180 ₺', desc: 'Özel hamuru, krema dolgusu ve Belçika çikolatasının muhteşem lezzeti. AFİYETLE!', moods: ['tatli'], category: 'Tatlılar' },
+    { name: 'Ajda', price: '200 ₺', desc: 'Meyve, krema ve çikolatanın buluşmuş en güzel hali. Taze çilek, muz, krep kırığı ve Belçika çikolatası. AFİYETLE!', moods: ['tatli'], category: 'Tatlılar' },
+  ];
 
-    function disableForm(disabled = true) {
-      [staffCategory, staffItem, staffName, staffPrice, staffDesc, staffNew, staffImgFile].forEach(el => {
-        if (el) el.disabled = disabled;
-      });
+  const moodLabels = {
+    paylas: 'Paylaşmalık',
+    klasik: 'Klasik',
+    rahat: 'Rahat',
+    enerji: 'Enerji',
+    hafif: 'Hafif',
+    tatli: 'Tatlı'
+  };
+
+  const menuEl = document.getElementById('menu-list');
+  const categorySelect = document.getElementById('categoryFilter');
+  const categories = new Map();
+
+  menuData.forEach(item => {
+    if (!categories.has(item.category)) {
+      categories.set(item.category, []);
     }
+    categories.get(item.category).push(item);
+  });
 
-    async function hashText(text) {
-      const data = new TextEncoder().encode(text);
-      const digest = await crypto.subtle.digest('SHA-256', data);
-      return Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2, '0')).join('');
-    }
+  // Dropdown seçeneklerini ekle
+  Array.from(categories.keys()).forEach(cat => {
+    const opt = document.createElement('option');
+    opt.value = cat;
+    opt.textContent = cat;
+    categorySelect.appendChild(opt);
+  });
 
-    function itemTemplate(item) {
-      return `
-        <div class="item">
-          <div class="item-title">
-            <span>${item.name}</span><span class="price">${item.price}</span>
-          </div>
-          <p class="desc">${item.desc || ''}</p>
-      ${item.img ? `<div class="item-media"><img class="item-img" src="${item.img}" alt="${item.name}"></div>` : ''}
-        </div>`;
-    }
+  categories.forEach((items, categoryName) => {
+    const section = document.createElement('section');
+    const slug = categoryName.toLowerCase().replace(/\s+/g, '-');
+    section.id = `cat-${slug}`;
+    section.dataset.category = categoryName;
+    section.style.marginBottom = '26px';
 
-    function attachDropdownHandlers() {
-      document.querySelectorAll('.card').forEach(card => {
-        const toggle = card.querySelector('.card-toggle');
-        if (!toggle) return;
-        toggle.addEventListener('click', () => {
-          card.classList.toggle('collapsed');
+    const headerBtn = document.createElement('button');
+    headerBtn.type = 'button';
+    headerBtn.className = 'cat-header';
+    headerBtn.setAttribute('aria-expanded', 'true');
+    headerBtn.dataset.target = `wrap-${slug}`;
+    headerBtn.innerHTML = `<span>${categoryName}</span><span class="cat-caret">▼</span>`;
+    section.appendChild(headerBtn);
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'menu-items';
+    wrapper.id = `wrap-${slug}`;
+
+    items.forEach(item => {
+      const card = document.createElement('article');
+      card.className = 'menu-card';
+
+      const title = document.createElement('h4');
+      title.textContent = `${item.name} – ${item.price}`;
+      card.appendChild(title);
+
+      const desc = document.createElement('p');
+      desc.textContent = item.desc;
+      card.appendChild(desc);
+
+      if (item.moods && item.moods.length) {
+        const moods = document.createElement('div');
+        moods.style.display = 'flex';
+        moods.style.gap = '8px';
+        moods.style.flexWrap = 'wrap';
+        item.moods.forEach(mood => {
+          const tag = document.createElement('span');
+          tag.textContent = moodLabels[mood] || mood;
+          tag.style.fontSize = '11px';
+          tag.style.padding = '4px 8px';
+          tag.style.borderRadius = '999px';
+          tag.style.background = 'rgba(6, 78, 59, 0.1)';
+          tag.style.color = '#064e3b';
+          tag.style.fontWeight = '700';
+          moods.appendChild(tag);
         });
-      });
-    }
-
-    function renderMenu() {
-      if (!menuContainer) return;
-      menuContainer.innerHTML = '';
-      categories.forEach(cat => {
-        const items = menuData.filter(i => i.category === cat);
-        const card = document.createElement('article');
-        card.className = 'card collapsed';
-        card.innerHTML = `
-          <button class="card-toggle" type="button">
-            <span class="card-title"><span class="pill"></span>${cat}</span>
-            <span class="caret">⌄</span>
-          </button>
-          <div class="card-body">
-            ${items.map(itemTemplate).join('')}
-          </div>
-        `;
-        menuContainer.appendChild(card);
-      });
-      attachDropdownHandlers();
-    }
-
-    function populateCategories() {
-      staffCategory.innerHTML = '';
-      categories.forEach(cat => {
-        const opt = document.createElement('option');
-        opt.value = cat;
-        opt.textContent = cat;
-        staffCategory.appendChild(opt);
-      });
-    }
-
-    function populateItems(selectedCat = staffCategory.value) {
-      const cat = selectedCat || categories[0];
-      staffCategory.value = cat;
-      staffItem.innerHTML = '';
-      const items = menuData.filter(i => i.category === cat);
-      items.forEach(item => {
-        const opt = document.createElement('option');
-        opt.value = item.name;
-        opt.textContent = item.name;
-        staffItem.appendChild(opt);
-      });
-      return items;
-    }
-
-    function fillFields() {
-      const cat = staffCategory.value;
-      const itemName = staffItem.value;
-      const item = menuData.find(i => i.category === cat && i.name === itemName);
-      if (!item || staffNew.checked) {
-        staffName.value = staffNew.checked ? '' : '';
-        staffPrice.value = staffNew.checked ? '' : '';
-        staffDesc.value = staffNew.checked ? '' : '';
-        currentImgData = '';
-        updatePreview('');
-        return;
+        card.appendChild(moods);
       }
-      staffName.value = item.name;
-      staffPrice.value = item.price;
-      staffDesc.value = item.desc || '';
-      currentImgData = item.img || '';
-      updatePreview(currentImgData);
-    }
 
-    function setStatus(msg) {
-      staffStatus.textContent = msg || '';
-      if (msg) setTimeout(() => { staffStatus.textContent = ''; }, 2000);
-    }
-
-    function openStaffScreen() {
-      staffScreen.classList.add('active');
-      staffScreen.setAttribute('aria-hidden', 'false');
-      staffPanel.setAttribute('aria-hidden', 'true');
-      staffPanel.style.display = 'none';
-      staffPass.value = '';
-      lockStatus.textContent = 'Kilidi açmak için şifre girin.';
-      lockStatus.style.color = '#0f172a';
-      isUnlocked = false;
-      disableForm(true);
-    }
-
-    function closeStaffScreen() {
-      staffScreen.classList.remove('active');
-      staffScreen.setAttribute('aria-hidden', 'true');
-    }
-
-    renderMenu();
-    populateCategories();
-    populateItems();
-    fillFields();
-    disableForm(true);
-    updatePreview('');
-
-    if (staffEntry) staffEntry.addEventListener('click', openStaffScreen);
-    if (staffClose) staffClose.addEventListener('click', closeStaffScreen);
-    if (staffExit) staffExit.addEventListener('click', closeStaffScreen);
-
-    if (staffCategory) {
-      staffCategory.addEventListener('change', () => {
-        staffNew.checked = false;
-        populateItems();
-        staffItem.disabled = false;
-        fillFields();
-      });
-    }
-
-    if (staffItem) {
-      staffItem.addEventListener('change', () => {
-        staffNew.checked = false;
-        staffItem.disabled = false;
-        fillFields();
-      });
-    }
-
-    if (staffNew) {
-      staffNew.addEventListener('change', () => {
-        if (staffNew.checked) {
-          staffItem.disabled = true;
-          staffName.value = '';
-          staffPrice.value = '';
-          staffDesc.value = '';
-          currentImgData = '';
-          updatePreview('');
-        } else {
-          staffItem.disabled = false;
-          fillFields();
-        }
-      });
-    }
-
-    function updatePreview(src) {
-      if (staffImgPreview) {
-        if (src) {
-          staffImgPreview.innerHTML = `<img src="${src}" alt="Önizleme">`;
-        } else {
-          staffImgPreview.textContent = 'Henüz görsel seçilmedi';
-        }
-      }
-    }
-
-    if (staffImgFile) {
-      staffImgFile.addEventListener('change', () => {
-        const file = staffImgFile.files[0];
-        if (!file) {
-          currentImgData = '';
-          updatePreview('');
-          return;
-        }
-        const reader = new FileReader();
-        reader.onload = e => {
-          currentImgData = e.target.result;
-          updatePreview(currentImgData);
-        };
-        reader.readAsDataURL(file);
-      });
-    }
-
-    if (staffImgClear) {
-      staffImgClear.addEventListener('click', () => {
-        currentImgData = '';
-        if (staffImgFile) staffImgFile.value = '';
-        updatePreview('');
-      });
-    }
-
-    if (staffDelete) {
-      staffDelete.addEventListener('click', () => {
-        if (!isUnlocked) {
-          setStatus('Önce kilidi açın.');
-          return;
-        }
-        const cat = staffCategory.value;
-        const itemName = staffItem.value;
-        const idx = menuData.findIndex(i => i.category === cat && i.name === itemName);
-        if (idx >= 0) {
-          menuData.splice(idx, 1);
-          setStatus('Ürün silindi');
-          renderMenu();
-          populateItems(cat);
-          fillFields();
-        } else {
-          setStatus('Ürün bulunamadı');
-        }
-      });
-    }
-
-    if (staffForm) {
-      staffForm.addEventListener('submit', e => {
-        e.preventDefault();
-        if (!isUnlocked) {
-          setStatus('Önce kilidi açın.');
-          return;
-        }
-        const cat = staffCategory.value;
-        const isNew = staffNew.checked;
-        const name = staffName.value.trim();
-        const price = staffPrice.value.trim();
-        const desc = staffDesc.value.trim();
-        const img = currentImgData;
-        if (!cat || !name || !price) {
-          setStatus('Lütfen zorunlu alanları doldurun.');
-          return;
-        }
-
-        if (isNew) {
-          menuData.push({ name, price, desc, img, category: cat, moods: ['klasik'] });
-          populateItems(cat);
-          staffItem.value = name;
-          staffItem.disabled = false;
-          staffNew.checked = false;
-          setStatus('Yeni ürün eklendi');
-        } else {
-          const idx = menuData.findIndex(i => i.category === cat && i.name === staffItem.value);
-          if (idx >= 0) {
-            menuData[idx].name = name;
-            menuData[idx].price = price;
-            menuData[idx].desc = desc;
-            menuData[idx].img = img;
-            setStatus('Güncellendi');
-          }
-        }
-
-        renderMenu();
-        populateItems(cat);
-        staffItem.value = name;
-        fillFields();
-      });
-    }
-
-    staffUnlock.addEventListener('click', async () => {
-      const pass = staffPass.value.trim();
-      if (!pass) {
-        lockStatus.textContent = 'Şifre girin.';
-        lockStatus.style.color = '#b91c1c';
-        return;
-      }
-      const hash = await hashText(pass);
-      if (hash === STAFF_HASH) {
-        isUnlocked = true;
-        disableForm(false);
-        lockStatus.textContent = 'Kilidi açtınız.';
-        lockStatus.style.color = '#15803d';
-        staffPanel.style.display = 'grid';
-        staffPanel.setAttribute('aria-hidden', 'false');
-      } else {
-        lockStatus.textContent = 'Şifre hatalı.';
-        lockStatus.style.color = '#b91c1c';
-        isUnlocked = false;
-        disableForm(true);
-        staffPanel.style.display = 'none';
-        staffPanel.setAttribute('aria-hidden', 'true');
-      }
+      wrapper.appendChild(card);
     });
 
-    moodChips.forEach(chip => {
-      chip.addEventListener('click', () => {
-        moodChips.forEach(c => c.classList.remove('active'));
-        chip.classList.add('active');
-        activeMood = chip.dataset.mood;
-      });
+    section.appendChild(wrapper);
+    menuEl.appendChild(section);
+  });
+
+  menuEl.addEventListener('click', (e) => {
+    const header = e.target.closest('.cat-header');
+    if (!header) return;
+    const targetId = header.dataset.target;
+    const body = document.getElementById(targetId);
+    if (!body) return;
+    const isOpen = header.getAttribute('aria-expanded') === 'true';
+    header.setAttribute('aria-expanded', String(!isOpen));
+    header.classList.toggle('collapsed', isOpen);
+    body.style.display = isOpen ? 'none' : 'grid';
+  });
+
+  categorySelect.addEventListener('change', (e) => {
+    const selected = e.target.value;
+    const sections = menuEl.querySelectorAll('section');
+    sections.forEach(sec => {
+      const isMatch = selected === 'all' || sec.dataset.category === selected;
+      sec.style.display = isMatch ? '' : 'none';
     });
-
-    function pickSuggestions(mood) {
-      if (!mood) return [];
-      const pool = menuData.filter(item => item.moods.includes(mood));
-      if (!pool.length) return [];
-      const shuffled = pool.sort(() => 0.5 - Math.random());
-      return shuffled.slice(0, 3);
-    }
-
-    const resultsEl = document.getElementById('aiResults');
-    document.getElementById('aiSuggest').addEventListener('click', () => {
-      const picks = pickSuggestions(activeMood);
-      resultsEl.innerHTML = '';
-      if (!activeMood) {
-        resultsEl.innerHTML = '<div class="ai-card"><div class="desc">Önce bir ruh hâli seç.</div></div>';
-        return;
+    if (selected !== 'all') {
+      const target = document.querySelector(`[data-category="${selected}"]`);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
-      if (!picks.length) {
-        resultsEl.innerHTML = '<div class="ai-card"><div class="desc">Şimdilik öneri bulunamadı.</div></div>';
-        return;
-      }
-      picks.forEach(p => {
-        const el = document.createElement('div');
-        el.className = 'ai-card';
-        el.innerHTML = `
-          <div class="title"><span>${p.name}</span><span>${p.price}</span></div>
-          <div class="desc">${p.desc}</div>
-          <div class="tagline">${p.category} • ${activeMood.toUpperCase()} modu</div>
-        `;
-        resultsEl.appendChild(el);
-      });
-    });
-
-    // Giriş ekranı kapanışı
-    const introScreen = document.getElementById('introScreen');
-    function closeIntro(callback) {
-      if (!introScreen) return;
-      introScreen.classList.add('hidden');
-      setTimeout(() => {
-        introScreen.remove();
-        if (callback) callback();
-      }, 260);
     }
-
-    const startMenuBtn = document.getElementById('startMenu');
-    if (startMenuBtn) {
-      startMenuBtn.addEventListener('click', () => closeIntro());
-    }
-
-    document.querySelectorAll('.intro-link').forEach(link => {
-      link.addEventListener('click', e => {
-        e.preventDefault();
-        const target = link.getAttribute('href');
-        const scrollToTarget = () => {
-          if (target && target.startsWith('#')) {
-            const el = document.querySelector(target);
-            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
-        };
-        closeIntro(scrollToTarget);
-      });
-    });
-
-  </script>
+  });
+</script>
 </body>
 </html>
