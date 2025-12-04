@@ -94,36 +94,15 @@
       margin: 16px 0 10px;
     }
 
-    .logo-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 16px;
-      background: linear-gradient(135deg, var(--green), var(--green-dark));
-      position: relative;
-      box-shadow: var(--shadow);
-    }
-
-    .logo-icon::before {
-      content: "";
-      position: absolute;
-      inset: 10px;
-      border-radius: 12px 20px 12px 12px;
+    .brand-logo {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      padding: 6px;
+      object-fit: contain;
       background: var(--white);
-      transform: rotate(-6deg);
-      opacity: 0.92;
-    }
-
-    .logo-icon::after {
-      content: "";
-      position: absolute;
-      width: 14px;
-      height: 26px;
-      border-radius: 14px 14px 6px 6px;
-      background: var(--green);
-      top: 8px;
-      right: 8px;
-      transform: rotate(18deg);
-      box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.15);
+      border: 1px solid rgba(21, 128, 61, 0.12);
+      box-shadow: var(--shadow);
     }
 
     .brand-name {
@@ -500,34 +479,15 @@
       place-items: center;
     }
     .intro-logo {
-      width: 88px;
-      height: 88px;
+      width: 120px;
+      height: 120px;
       border-radius: 24px;
-      background: linear-gradient(135deg, var(--green), var(--green-dark));
-      position: relative;
-      box-shadow: 0 16px 30px rgba(21, 128, 61, 0.28);
-      animation: floaty 4s ease-in-out infinite alternate;
-    }
-    .intro-logo::before {
-      content: "";
-      position: absolute;
-      inset: 16px;
-      border-radius: 16px 28px 16px 16px;
+      padding: 12px;
+      object-fit: contain;
       background: var(--white);
-      transform: rotate(-6deg);
-      opacity: 0.92;
-    }
-    .intro-logo::after {
-      content: "";
-      position: absolute;
-      width: 20px;
-      height: 38px;
-      border-radius: 14px 14px 6px 6px;
-      background: var(--green);
-      top: 10px;
-      right: 12px;
-      transform: rotate(18deg);
-      box-shadow: 0 0 0 5px rgba(34, 197, 94, 0.18);
+      border: 1px solid rgba(21, 128, 61, 0.12);
+      box-shadow: 0 16px 30px rgba(21, 128, 61, 0.24);
+      animation: floaty 4s ease-in-out infinite alternate;
     }
     .intro-brand {
       font-size: 22px;
@@ -871,7 +831,7 @@
       <div class="intro-glow two" aria-hidden="true"></div>
       <div class="intro-hero">
         <div class="intro-ring">
-          <div class="intro-logo" aria-hidden="true"></div>
+          <img src="logo.png" alt="Green Light Cafe logosu" class="intro-logo">
         </div>
         <div class="intro-welcome">HOŞ GELDİNİZ</div>
         <div class="intro-brand">Green Light Cafe</div>
@@ -889,7 +849,7 @@
 
   <main class="page">
     <div class="brand" aria-label="Greenlight logo">
-      <div class="logo-icon" aria-hidden="true"></div>
+      <img src="logo.png" alt="Green Light Cafe logosu" class="brand-logo">
       <div class="brand-name">Green Light Cafe</div>
     </div>
     <nav class="nav-links" aria-label="Ana menü">
@@ -1046,52 +1006,52 @@
     let activeMood = '';
 
     const menuData = [
-      { name: 'Serpme Kahvaltı (2 kişilik)', price: '700 ₺', desc: 'Taze peynirler, 8 çeşit sürülebilir, yeşillik tabağı, omlet/menemen seçeneği, çıtır patates, sosis, sigara böreği ve sınırsız çay.', moods: ['paylas', 'klasik'], category: 'Kahvaltı' },
-      { name: 'Simit Tabağı', price: '110 ₺', desc: 'Sıcak simit; peynir, zeytin, salam, taze yeşillik ve bir fincan çay ikramıyla.', moods: ['klasik', 'rahat'], category: 'Kahvaltı' },
-      { name: 'Menemen', price: '100 ₺', desc: 'Domates ve biberle sahanda pişirilmiş.', moods: ['enerji', 'klasik'], category: 'Sahanda & Tavada' },
-      { name: 'Sade Omlet', price: '75 ₺', desc: 'Tereyağında sade omlet.', moods: ['hafif', 'klasik'], category: 'Sahanda & Tavada' },
-      { name: 'Sebzeli Omlet', price: '100 ₺', desc: 'Kapya biber, yeşil biber ve maydanozla.', moods: ['hafif'], category: 'Sahanda & Tavada' },
-      { name: 'Kaşarlı Omlet', price: '100 ₺', desc: 'Bol kaşarlı omlet.', moods: ['klasik'], category: 'Sahanda & Tavada' },
-      { name: 'Beyaz Peynirli Omlet', price: '100 ₺', desc: 'Beyaz peynir dokunuşu.', moods: ['klasik'], category: 'Sahanda & Tavada' },
-      { name: 'Sucuklu Yumurta', price: '140 ₺', desc: 'Tereyağında pişen sucuklu yumurta.', moods: ['enerji'], category: 'Sahanda & Tavada' },
-      { name: 'Sahanda Sucuk', price: '120 ₺', desc: 'Kızarmış halka sucuk.', moods: ['enerji', 'klasik'], category: 'Sahanda & Tavada' },
-      { name: 'Çıtır Sepet', price: '200 ₺', desc: 'Patates kızartması, soğan halkası, sigara böreği, sosis ve çıtır tavuk karışımı.', moods: ['paylas', 'enerji'], category: 'Atıştırmalıklar' },
-      { name: 'Patates Kızartması (K)', price: '60 ₺', desc: 'Küçük boy patates.', moods: ['paylas', 'klasik'], category: 'Atıştırmalıklar' },
-      { name: 'Patates Kızartması (O)', price: '85 ₺', desc: 'Orta boy patates.', moods: ['paylas', 'klasik'], category: 'Atıştırmalıklar' },
-      { name: 'Patates Kızartması (B)', price: '120 ₺', desc: 'Büyük boy patates.', moods: ['paylas'], category: 'Atıştırmalıklar' },
-      { name: 'Sigara Böreği', price: '100 ₺', desc: 'Peynirli çıtır rulolar.', moods: ['paylas'], category: 'Atıştırmalıklar' },
-      { name: 'Kaşarlı Tost', price: '110 ₺', desc: 'Kaşar peyniriyle klasik tost.', moods: ['klasik'], category: 'Tostlar' },
-      { name: 'Karışık Tost', price: '140 ₺', desc: 'Sucuk ve kaşarla.', moods: ['enerji'], category: 'Tostlar' },
-      { name: 'Sucuklu Tost', price: '120 ₺', desc: 'Bol sucuklu.', moods: ['enerji', 'klasik'], category: 'Tostlar' },
-      { name: 'Bazlama Tost', price: '150 ₺', desc: 'Yumuşak bazlama arasında.', moods: ['paylas', 'klasik'], category: 'Tostlar' },
-      { name: 'Pesto Soslu Tost', price: '120 ₺', desc: 'Pesto soslu ferah tost.', moods: ['hafif'], category: 'Tostlar' },
-      { name: 'Kaşarlı Gözleme', price: '110 ₺', desc: 'İnce hamurda bol kaşar.', moods: ['klasik'], category: 'Gözlemeler' },
-      { name: 'Patates-Kaşarlı Gözleme', price: '130 ₺', desc: 'Patates ve kaşarlı iç harç.', moods: ['enerji'], category: 'Gözlemeler' },
-      { name: 'Ispanak-Kaşarlı Gözleme', price: '130 ₺', desc: 'Ispanak ve kaşarlı iç.', moods: ['hafif'], category: 'Gözlemeler' },
-      { name: 'Mantar-Kaşarlı Gözleme', price: '130 ₺', desc: 'Mantar ve kaşarlı iç.', moods: ['hafif'], category: 'Gözlemeler' },
-      { name: 'Sucuk-Kaşarlı Gözleme', price: '170 ₺', desc: 'Baharatlı sucuk ve kaşar.', moods: ['enerji'], category: 'Gözlemeler' },
-      { name: 'Pizza Gözleme', price: '200 ₺', desc: 'Pizza lezzetiyle gözleme.', moods: ['enerji', 'paylas'], category: 'Gözlemeler' },
-      { name: 'Köri Soslu Tavuklu Penne', price: '250 ₺', desc: 'Köri sos ve tavuklu penne.', moods: ['enerji'], category: 'Makarnalar' },
-      { name: 'Fettuccine Alfredo', price: '250 ₺', desc: 'Kremalı alfredo soslu.', moods: ['klasik'], category: 'Makarnalar' },
-      { name: 'Kremalı Mantarlı Makarna', price: '250 ₺', desc: 'Kremalı mantar soslu.', moods: ['rahat'], category: 'Makarnalar' },
-      { name: 'Hamburger', price: '220 ₺', desc: 'Klasik burger.', moods: ['enerji', 'klasik'], category: 'Ana Yemekler' },
-      { name: 'Cheeseburger', price: '240 ₺', desc: 'Peynirli burger.', moods: ['enerji', 'klasik'], category: 'Ana Yemekler' },
-      { name: 'Tavuk Schnitzel', price: '250 ₺', desc: 'Pane tavuk schnitzel.', moods: ['enerji'], category: 'Ana Yemekler' },
-      { name: 'Tavuk Wrap', price: '230 ₺', desc: 'Tavuklu dürüm.', moods: ['hafif', 'enerji'], category: 'Ana Yemekler' },
-      { name: 'Ton Balıklı Salata', price: '200 ₺', desc: 'Ton balıklı yeşil salata.', moods: ['hafif'], category: 'Salatalar' },
-      { name: 'Sezar Salata', price: '200 ₺', desc: 'Klasik sezar soslu.', moods: ['hafif', 'klasik'], category: 'Salatalar' },
-      { name: 'Hellim Salata', price: '160 ₺', desc: 'Izgara hellim ve yeşillik.', moods: ['hafif'], category: 'Salatalar' },
-      { name: 'İçli Köfte (Kıymalı-Cevizli) 3 Adet', price: '240 ₺', desc: 'Kıymalı-cevizli içli köfte.', moods: ['enerji'], category: 'Anne Eli Ürünleri' },
-      { name: 'İçli Köfte (Patatesli) 3 Adet', price: '200 ₺', desc: 'Patatesli içli köfte.', moods: ['hafif'], category: 'Anne Eli Ürünleri' },
-      { name: 'Yaprak Sarma (Haftasonu)', price: '200 ₺', desc: 'Haftasonu çıkan yaprak sarma.', moods: ['hafif', 'rahat'], category: 'Anne Eli Ürünleri' },
-      { name: 'San Sebastian', price: '170 ₺', desc: 'Yoğun peynirli cheesecake.', moods: ['tatli'], category: 'Tatlılar' },
-      { name: 'Limonlu Cheesecake', price: '170 ₺', desc: 'Ferahlık veren limon aroması.', moods: ['tatli'], category: 'Tatlılar' },
-      { name: 'Çilekli Magnolia', price: '170 ₺', desc: 'Çilek ve krema dengesi.', moods: ['tatli', 'hafif'], category: 'Tatlılar' },
-      { name: 'Karamelli Trileçe', price: '150 ₺', desc: 'Karamel soslu trileçe.', moods: ['tatli', 'rahat'], category: 'Tatlılar' },
-      { name: 'Frambuazlı Trileçe', price: '150 ₺', desc: 'Frambuaz dokunuşlu trileçe.', moods: ['tatli', 'hafif'], category: 'Tatlılar' },
-      { name: 'Tiramisu', price: '150 ₺', desc: 'Kakao ve espresso notları.', moods: ['tatli', 'rahat'], category: 'Tatlılar' },
-      { name: 'Fransız Ekler', price: '150 ₺', desc: 'Vanilya kremalı ekler.', moods: ['tatli'], category: 'Tatlılar' },
-      { name: 'Ajda', price: '180 ₺', desc: 'Günün porsiyonluk tatlısı.', moods: ['tatli'], category: 'Tatlılar' },
+      { name: 'Serpme Kahvaltı (2 kişilik)', price: '700 ₺', desc: 'Taze peyn!r çeş!tler!,sek!z çeş!t sürüleb!l!r ürünler!yle,yeş!ll!k tabağı,omlet/menemen seçeneğ!,çıtır patates sos!s ve s!gara böreğ! !le sınırsız çayla !ç!n!z! ısıtacak b!r serpme kahvaltı Green L!ght a!les!nden. AFİYETLE!', moods: ['paylas', 'klasik'], category: 'Kahvaltı' },
+      { name: 'Simit Tabağı', price: '110 ₺', desc: 'Sıcacık s!m!t yanında peyn!r,zeyt!n ,salam taptaze yeş!ll!klerle güne haf!f ama lezzetl! b!r başlangıç. B!r f!ncan çayda b!zden.AFİYETLE!', moods: ['klasik', 'rahat'], category: 'Kahvaltı' },
+      { name: 'Menemen', price: '100 ₺', desc: 'Taze domates ve b!ber !le yapılmış bol kaşarlı Türk mutfağının vazgeç!lmez!.AFİYETLE!', moods: ['enerji', 'klasik'], category: 'Sahanda & Tavada' },
+      { name: 'Sade Omlet', price: '75 ₺', desc: 'Sade omlet.AFİYETLE!', moods: ['hafif', 'klasik'], category: 'Sahanda & Tavada' },
+      { name: 'Sebzeli Omlet', price: '100 ₺', desc: 'Kapya b!ber,yeş!l b!ber,maydonozun buluşması.AFİYETLE!', moods: ['hafif'], category: 'Sahanda & Tavada' },
+      { name: 'Kaşarlı Omlet', price: '100 ₺', desc: 'KAŞARLI OMLET 100 ₺', moods: ['klasik'], category: 'Sahanda & Tavada' },
+      { name: 'Beyaz Peynirli Omlet', price: '100 ₺', desc: 'BEYAZ PEYNİRLİ OMLET 100 ₺', moods: ['klasik'], category: 'Sahanda & Tavada' },
+      { name: 'Sucuklu Yumurta', price: '140 ₺', desc: 'Tereyağında p!şen yumurta ve nef!s sucuk d!l!mler!n!n eşs!z buluşması. Kahvaltının vazgeç!lmez klas!ğ!.AFİYETLE!', moods: ['enerji'], category: 'Sahanda & Tavada' },
+      { name: 'Sahanda Sucuk', price: '120 ₺', desc: 'Tavada özenle kızartılan aromat!k sucuk d!l!mler! ,nef!s kokusuyla serv!s ed!l!r.AFİYETLE!', moods: ['enerji', 'klasik'], category: 'Sahanda & Tavada' },
+      { name: 'Çıtır Sepet', price: '200 ₺', desc: 'Çıtır sevenler burda mı ? Patates kızartması,soğan halkası,s!gara böreğ!,sos!s ve çıtır tavuk b!r sepette buluştu: tam paylaşmalık.AFİYETLE!', moods: ['paylas', 'enerji'], category: 'Atıştırmalıklar' },
+      { name: 'Patates Kızartması (K)', price: '60 ₺', desc: 'KÜÇÜK BOY:60 ₺', moods: ['paylas', 'klasik'], category: 'Atıştırmalıklar' },
+      { name: 'Patates Kızartması (O)', price: '85 ₺', desc: 'ORTA BOY:85 ₺', moods: ['paylas', 'klasik'], category: 'Atıştırmalıklar' },
+      { name: 'Patates Kızartması (B)', price: '120 ₺', desc: 'BÜYÜK BOY:120 ₺', moods: ['paylas'], category: 'Atıştırmalıklar' },
+      { name: 'Sigara Böreği', price: '100 ₺', desc: 'İncec!k,lor ve kaşar peyn!r!yle hazırlanmış çıtır börekler.AFİYETLE!', moods: ['paylas'], category: 'Atıştırmalıklar' },
+      { name: 'Kaşarlı Tost', price: '110 ₺', desc: 'İk! d!l!m arasında bolca er!yen,uzayan lezzet.AFİYETLE!', moods: ['klasik'], category: 'Tostlar' },
+      { name: 'Karışık Tost', price: '140 ₺', desc: 'Sucuk severler!n favor!s!! Sucuk ve kaşar peyn!r!n!n mükemmel buluşması.AFİYETLE!', moods: ['enerji'], category: 'Tostlar' },
+      { name: 'Sucuklu Tost', price: '120 ₺', desc: 'Kaşarsız ,tamamen sucuk odaklı lezzet.AFİYETLE!', moods: ['enerji', 'klasik'], category: 'Tostlar' },
+      { name: 'Bazlama Tost', price: '150 ₺', desc: 'Taş fırın lezzet!nde bazlama ekmeğ!,sucuk,kaşar peyn!r,sos!s ve acuka b!r tosttan bekled!ğ!n!z her şey! AFİYETLE!', moods: ['paylas', 'klasik'], category: 'Tostlar' },
+      { name: 'Pesto Soslu Tost', price: '120 ₺', desc: 'Fesleğen!n başrolde olduğu,özel pesto sosuyla mar!ne ed!lm!ş kaşar peyn!rler! çıtır ekmek arasında.AFİYETLE!', moods: ['hafif'], category: 'Tostlar' },
+      { name: 'Kaşarlı Gözleme', price: '110 ₺', desc: 'Er!t!lm!ş kaşar peyn!r! ve çıtır yufkasıyla sade lezzet arayanlara.AFİYETLE !', moods: ['klasik'], category: 'Gözlemeler' },
+      { name: 'Patates-Kaşarlı Gözleme', price: '130 ₺', desc: 'Yumuşak,baharatlı patates ezmes! ve er!yen kaşar peyn!r!.AFİYETLE!', moods: ['enerji'], category: 'Gözlemeler' },
+      { name: 'Ispanak-Kaşarlı Gözleme', price: '130 ₺', desc: 'Taptaze ıspanak yapraklar ve er!yen kaşar peyn!r!.AFİYETLE!', moods: ['hafif'], category: 'Gözlemeler' },
+      { name: 'Mantar-Kaşarlı Gözleme', price: '130 ₺', desc: 'Lezzetl! kültür mantarı,bol kaşar peyn!r!.AFİYETLE!', moods: ['hafif'], category: 'Gözlemeler' },
+      { name: 'Sucuk-Kaşarlı Gözleme', price: '170 ₺', desc: 'Özel sucuk d!l!mler! ve kaşar peyn!r!n!n muhteşem buluşması.AFİYETLE!', moods: ['enerji'], category: 'Gözlemeler' },
+      { name: 'Pizza Gözleme', price: '200 ₺', desc: 'P!zzanın tüm malzemeler!,haf!f doyurucu ve çok lezzetl!.AFİYETLE!', moods: ['enerji', 'paylas'], category: 'Gözlemeler' },
+      { name: 'Köri Soslu Tavuklu Penne', price: '250 ₺', desc: 'Kremalı kör! sosuyla hazırlanmış tavuk.Yumuşak,sıcak ve dengel! b!r lezzet.AFİYETLE!', moods: ['enerji'], category: 'Makarnalar' },
+      { name: 'Fettuccine Alfredo', price: '250 ₺', desc: 'İtalyan mutfağının en zar!f şer!t makarnası…sotelenm!ş mantar ve tavuk !le !peks! makarna.AFİYETLE!', moods: ['klasik'], category: 'Makarnalar' },
+      { name: 'Kremalı Mantarlı Makarna', price: '250 ₺', desc: 'Renkl! b!berler,sotelenm!ş mantarların özel sosla b!rleşt!ğ! makarna deney!m!.AFİYETLE!', moods: ['rahat'], category: 'Makarnalar' },
+      { name: 'Hamburger', price: '220 ₺', desc: 'Lezzetl! ızgara köfte,taze marul domates ve özel sosla hazırlanır. Klas!k tadın keyf!n! çıkarın.AFİYETLE!', moods: ['enerji', 'klasik'], category: 'Ana Yemekler' },
+      { name: 'Cheeseburger', price: '240 ₺', desc: 'Er!m!ş peyn!rle buluşan ızgara köfte,taptaze sebzeler ve özel soslarla hazırlanan,damak çatlatan lezzet. AFİYETLE!', moods: ['enerji', 'klasik'], category: 'Ana Yemekler' },
+      { name: 'Tavuk Schnitzel', price: '250 ₺', desc: 'Çıtır dışı,yumuşacık tavuk f!leto,özel baharatlarla lezzetlend!r!lm!ş nef!s b!r klas!k.AFİYETLE!', moods: ['enerji'], category: 'Ana Yemekler' },
+      { name: 'Tavuk Wrap', price: '230 ₺', desc: 'Sote tavuk,taze sebzelerle tort!lla arasında buluştuğu prat!k ve lezzetl! seçenek.AFİYETLE!', moods: ['hafif', 'enerji'], category: 'Ana Yemekler' },
+      { name: 'Ton Balıklı Salata', price: '200 ₺', desc: 'Taze yeş!ll!kler,mısır ve ton balığının doyurucu lezzet! !le s!zlerle.AFİYETLE!', moods: ['hafif'], category: 'Salatalar' },
+      { name: 'Sezar Salata', price: '200 ₺', desc: 'Çıtır marul yaprakları,özenle hazırlanmış sezar sosuyla tavuğun buluşması.AFİYETLE!', moods: ['hafif', 'klasik'], category: 'Salatalar' },
+      { name: 'Hellim Peynirli Salata', price: '160 ₺', desc: 'Izgara hell!m peyn!r ve taptaze yeş!ll!klerle hazırlanan haf!f ve lezzetl! salata.AFİYETLE!', moods: ['hafif'], category: 'Salatalar' },
+      { name: 'İçli Köfte (Kıymalı-Cevizli) 3 Adet', price: '240 ₺', desc: 'Özenle yoğrulmuş ,baharatlarla harmanlanmış kıyma ve cev!z dolgusuyla hazırlanmış enfes köfte.AFİYETLE!', moods: ['enerji'], category: 'Anne Eli Ürünleri' },
+      { name: 'İçli Köfte (Patatesli) 3 Adet', price: '200 ₺', desc: 'Lezzetl! patates püres!yle doldurulmuş,dışı çıtır,!ç! yumuşacık köfte.AFİYETLE!', moods: ['hafif'], category: 'Anne Eli Ürünleri' },
+      { name: 'Yaprak Sarma (Haftasonu)', price: '200 ₺', desc: 'Asma yaprağının !ç!nde p!r!nç,baharat ve haf!f zeyt!nyağıyla sarılmış ev yapımı sarma.AFİYETLE!', moods: ['hafif', 'rahat'], category: 'Anne Eli Ürünleri' },
+      { name: 'San Sebastian', price: '170 ₺', desc: 'Çıtır kabuğu,yumuşacık !ç dokusuyla Belç!ka ç!kolatasının muhteşem uyumu.AFİYETLE!', moods: ['tatli'], category: 'Tatlılar' },
+      { name: 'Limonlu Cheesecake', price: '170 ₺', desc: 'Ferahlık veren l!mon aroması ve krems! peyn!r!n mükemmel uyumu.Haf!f ve taze b!r tatlı deney!m!.AFİYETLE!', moods: ['tatli'], category: 'Tatlılar' },
+      { name: 'Çilekli Magnolia', price: '170 ₺', desc: 'Kat kat lezzet! Taze ç!lek ve kremanın buluştuğu haf!f ve nef!s magnol!a.AFİYETLE!', moods: ['tatli', 'hafif'], category: 'Tatlılar' },
+      { name: 'Karamelli Trileçe', price: '150 ₺', desc: 'Tatlı karamel!n zeng!nl!ğ! !le yumuşak ve sütlü lezzet.AFİYETLE!', moods: ['tatli', 'rahat'], category: 'Tatlılar' },
+      { name: 'Frambuazlı Trileçe', price: '150 ₺', desc: 'Ferah frambuazın haf!f ekş!l!ğ! b!r arada…yumuşak ve sütlü lezzet.AFİYETLE!', moods: ['tatli', 'hafif'], category: 'Tatlılar' },
+      { name: 'Tiramisu', price: '150 ₺', desc: 'Kahve aromalı,mascarpone kreması ve kakaonun mükemmel uyumu !le İtalyan klas!k tatlı.AFİYETLE!', moods: ['tatli', 'rahat'], category: 'Tatlılar' },
+      { name: 'Fransız Ekler', price: '150 ₺', desc: 'Özel hamuru,krema dolgusu ve Belç!ka ç!kolatasının muhteşem lezzet!.AFİYETLE!', moods: ['tatli'], category: 'Tatlılar' },
+      { name: 'Ajda', price: '180 ₺', desc: 'Meyve,krema ve ç!kolatanın buluşmuş en güzel hal!. Taze ç!lek,muz,krep kırığı ve Belç!ka ç!kolatası.AFİYETLE!', moods: ['tatli'], category: 'Tatlılar' },
     ];
 
     const categories = ['Kahvaltı', 'Sahanda & Tavada', 'Atıştırmalıklar', 'Tostlar', 'Gözlemeler', 'Makarnalar', 'Ana Yemekler', 'Salatalar', 'Anne Eli Ürünleri', 'Tatlılar'];
