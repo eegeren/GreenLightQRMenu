@@ -31,11 +31,8 @@
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    font-size: 24px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    min-width: 200px;
-    flex: 1 1 auto;
+    flex: 0 0 auto;
+    justify-content: flex-start;
   }
   .navbar-links {
     display: flex;
@@ -46,13 +43,15 @@
     flex: 1 1 auto;
   }
   .brand-logo {
-    width: 42px;
-    height: 42px;
-    border-radius: 12px;
+    width: 72px;
+    height: 72px;
+    border-radius: 18px;
     object-fit: contain;
-    background: rgba(255,255,255,0.1);
-    padding: 6px;
-    border: 1px solid rgba(255,255,255,0.2);
+    background: #ffffff;
+    padding: 8px;
+    border: 2px solid rgba(255,255,255,0.65);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.22);
+    display: block;
   }
   .navbar a {
     color: white;
@@ -366,7 +365,6 @@
 <div class="navbar reveal">
   <div class="brand">
     <img src="logo.png" alt="Green Light logosu" class="brand-logo">
-    <span>GREEN LIGHT</span>
   </div>
   <div class="navbar-links">
     <a href="#menu">Menü</a>
