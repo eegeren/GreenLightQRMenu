@@ -627,13 +627,19 @@
       const card = document.createElement('article');
       card.className = 'menu-card';
 
-      const imgSrc = productImages[item.name];
-      if (imgSrc) {
+      const imgFile = productImages[item.name];
+      if (imgFile) {
         const img = document.createElement('img');
-        img.src = imgSrc;
         img.alt = `${item.name} görseli`;
         img.className = 'item-img';
-        img.onerror = () => img.remove();
+        const candidates = [`public/${imgFile}`, `/${imgFile}`, imgFile];
+        let idx = 0;
+        const tryNext = () => {
+          if (idx >= candidates.length) { img.remove(); return; }
+          img.src = candidates[idx++];
+        };
+        img.onerror = tryNext;
+        tryNext();
         card.appendChild(img);
       }
 
