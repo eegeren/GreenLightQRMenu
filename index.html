@@ -110,6 +110,116 @@
     color: #064e3b;
   }
 
+  /* AI SUGGEST */
+  .ai-box {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px 18px 28px;
+    background: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 14px 30px rgba(0,0,0,0.08);
+    border: 1px solid #e5e7eb;
+  }
+  .ai-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .ai-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    background: #ecfdf3;
+    color: #064e3b;
+    display: grid;
+    place-items: center;
+    font-size: 20px;
+    font-weight: 800;
+  }
+  .ai-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: #064e3b;
+  }
+  .ai-sub {
+    font-size: 13px;
+    color: #475569;
+  }
+  .ai-moods {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 12px 0;
+  }
+  .chip {
+    border: 1px solid #d1d5db;
+    background: #fff;
+    color: #064e3b;
+    border-radius: 999px;
+    padding: 8px 12px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 150ms ease;
+  }
+  .chip.selected {
+    background: #064e3b;
+    color: #fff;
+    border-color: #064e3b;
+  }
+  .ai-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+  .ai-btn {
+    background: linear-gradient(135deg, #ffd95a, #f59e0b);
+    color: #064e3b;
+    border: none;
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 10px 18px rgba(0,0,0,0.08);
+  }
+  .ai-hint {
+    font-size: 12px;
+    color: #475569;
+  }
+  .ai-results {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 12px;
+  }
+  .ai-card {
+    background: #f8fafc;
+    border-radius: 14px;
+    padding: 12px;
+    border: 1px solid #e5e7eb;
+    text-align: left;
+  }
+  .ai-card h4 {
+    margin: 0 0 6px;
+    color: #064e3b;
+    font-size: 15px;
+  }
+  .ai-card p {
+    margin: 0;
+    font-size: 13px;
+    color: #475569;
+    line-height: 1.45;
+  }
+  .ai-price {
+    font-weight: 800;
+    color: #0f172a;
+    font-size: 13px;
+    margin-top: 8px;
+    display: inline-block;
+  }
+
   /* MENU SECTION */
   .menu {
     padding: 50px 20px;
@@ -282,6 +392,30 @@
   </div>
 </div>
 
+<!-- AI SUGGESTIONS -->
+<div class="ai-box" id="ai">
+  <div class="ai-head">
+    <div class="ai-icon">✨</div>
+    <div>
+      <div class="ai-title">Greenlight Öneri Motoru</div>
+      <div class="ai-sub">Ruh hâline göre 3 öneri getirir</div>
+    </div>
+  </div>
+  <div class="ai-moods" role="list">
+    <button class="chip" data-mood="rahat">Rahatlamak</button>
+    <button class="chip" data-mood="enerji">Enerji toplamak</button>
+    <button class="chip" data-mood="hafif">Hafif ve fit</button>
+    <button class="chip" data-mood="tatli">Tatlı isteği</button>
+    <button class="chip" data-mood="paylas">Paylaşmalık</button>
+    <button class="chip" data-mood="klasik">Klasik seçim</button>
+  </div>
+  <div class="ai-actions">
+    <button id="aiSuggest" class="ai-btn">Önerileri Göster</button>
+    <div class="ai-hint">Bir veya birkaç ruh hâli seç, sana uygun menüleri getirelim.</div>
+  </div>
+  <div class="ai-results" id="aiResults"></div>
+</div>
+
 <!-- MENU -->
 <div id="menu" class="menu">
   <h2>Menümüz</h2>
@@ -306,7 +440,7 @@
 <!-- CONTACT -->
 <div id="contact" class="contact">
   <h2>İletişim</h2>
-  <p>Adres: Bandırma, Atatürk Caddesi</p>
+  <p>📍 Paşakonak Mah. 18033 Sk. 11/A Bandırma </p>
   <p>Telefon: 0 555 555 55 55</p>
 </div>
 
@@ -376,6 +510,9 @@
 
   const menuEl = document.getElementById('menu-list');
   const categorySelect = document.getElementById('categoryFilter');
+  const aiResults = document.getElementById('aiResults');
+  const aiButton = document.getElementById('aiSuggest');
+  const moodButtons = Array.from(document.querySelectorAll('.chip'));
   const categories = new Map();
 
   menuData.forEach(item => {
@@ -403,7 +540,8 @@
     const headerBtn = document.createElement('button');
     headerBtn.type = 'button';
     headerBtn.className = 'cat-header';
-    headerBtn.setAttribute('aria-expanded', 'true');
+    headerBtn.setAttribute('aria-expanded', 'false');
+    headerBtn.classList.add('collapsed');
     headerBtn.dataset.target = `wrap-${slug}`;
     headerBtn.innerHTML = `<span>${categoryName}</span><span class="cat-caret">▼</span>`;
     section.appendChild(headerBtn);
@@ -411,6 +549,7 @@
     const wrapper = document.createElement('div');
     wrapper.className = 'menu-items';
     wrapper.id = `wrap-${slug}`;
+    wrapper.style.display = 'none';
 
     items.forEach(item => {
       const card = document.createElement('article');
@@ -472,10 +611,62 @@
     if (selected !== 'all') {
       const target = document.querySelector(`[data-category="${selected}"]`);
       if (target) {
+        const header = target.querySelector('.cat-header');
+        const body = document.getElementById(header.dataset.target);
+        header.setAttribute('aria-expanded', 'true');
+        header.classList.remove('collapsed');
+        body.style.display = 'grid';
         target.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     }
   });
+
+  // AI öneri motoru
+  moodButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const isSelected = btn.classList.contains('selected');
+      moodButtons.forEach(b => b.classList.remove('selected'));
+      if (!isSelected) btn.classList.add('selected');
+    });
+  });
+
+  function renderSuggestions(list) {
+    aiResults.innerHTML = '';
+    if (!list.length) {
+      aiResults.innerHTML = '<div class="ai-card"><p>Uygun sonuç bulunamadı, başka ruh hâlleri seçmeyi deneyin.</p></div>';
+      return;
+    }
+    list.forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'ai-card';
+      const title = document.createElement('h4');
+      title.textContent = item.name;
+      const price = document.createElement('span');
+      price.className = 'ai-price';
+      price.textContent = item.price;
+      const desc = document.createElement('p');
+      desc.textContent = item.desc;
+      card.appendChild(title);
+      card.appendChild(price);
+      card.appendChild(desc);
+      aiResults.appendChild(card);
+    });
+  }
+
+  function suggest() {
+    const selectedMoods = moodButtons.filter(b => b.classList.contains('selected')).map(b => b.dataset.mood);
+    let pool = [];
+    if (selectedMoods.length) {
+      pool = menuData.filter(item => item.moods && item.moods.some(m => selectedMoods.includes(m)));
+    } else {
+      pool = [...menuData];
+    }
+    // shuffle and take 3
+    const shuffled = pool.sort(() => Math.random() - 0.5);
+    renderSuggestions(shuffled.slice(0, 3));
+  }
+
+  aiButton.addEventListener('click', suggest);
 </script>
 </body>
 </html>
