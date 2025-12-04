@@ -254,6 +254,16 @@
     text-align: left;
     transition: transform 160ms ease, box-shadow 160ms ease;
   }
+  .item-img {
+    width: 100%;
+    height: 180px;
+    object-fit: contain;
+    background: #f8fafc;
+    padding: 6px;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    margin-bottom: 10px;
+  }
   .menu-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 14px 28px rgba(0,0,0,0.12);
@@ -532,6 +542,53 @@
     tatli: 'Tatlı'
   };
 
+  const productImages = {
+    'Salep': 'public/salep.jpeg',
+    'Kış Çayı': 'public/bitkicaylari.jpeg',
+    'Ihlamur': 'public/bitkicaylari.jpeg',
+    'Nane-Limon': 'public/bitkicaylari.jpeg',
+    'Ada Çayı': 'public/bitkicaylari.jpeg',
+    'Papatya': 'public/bitkicaylari.jpeg',
+    'Yeşil Çay': 'public/bitkicaylari.jpeg',
+    'Espresso': 'public/salep.jpeg',
+    'Espresso Doppio': 'public/salep.jpeg',
+    'Americano': 'public/salep.jpeg',
+    'Latte': 'public/salep.jpeg',
+    'Cappuccino': 'public/salep.jpeg',
+    'Flat White': 'public/salep.jpeg',
+    'Filtre Kahve': 'public/salep.jpeg',
+    'Mocha': 'public/salep.jpeg',
+    'White Mocha': 'public/salep.jpeg',
+    'Caramel Latte': 'public/salep.jpeg',
+    'Vanilya Latte': 'public/salep.jpeg',
+    'Ice Americano': 'public/salep.jpeg',
+    'Ice Latte': 'public/salep.jpeg',
+    'Ice Flat White': 'public/salep.jpeg',
+    'Ice Mocha': 'public/salep.jpeg',
+    'Ice White Mocha': 'public/salep.jpeg',
+    'Ice Karamel Latte': 'public/salep.jpeg',
+    'Ice Vanilya Latte': 'public/salep.jpeg',
+    'Kaşarlı Gözleme': 'public/gozlemeler.jpeg',
+    'Patates-Kaşarlı Gözleme': 'public/gozlemeler.jpeg',
+    'Ispanak-Kaşarlı Gözleme': 'public/gozlemeler.jpeg',
+    'Mantar-Kaşarlı Gözleme': 'public/gozlemeler.jpeg',
+    'Sucuk-Kaşarlı Gözleme': 'public/gozlemeler.jpeg',
+    'Pizza Gözleme': 'public/gozlemeler.jpeg',
+    'İçli Köfte (Kıymalı-Cevizli) 3 Adet': 'public/iclikoftevesarma.jpeg',
+    'İçli Köfte (Patatesli) 3 Adet': 'public/iclikoftevesarma.jpeg',
+    'Yaprak Sarma (Haftasonu)': 'public/iclikoftevesarma.jpeg',
+    'San Sebastian': 'public/sansebastian.jpeg',
+    'Fransız Ekler': 'public/fransizekler.jpeg',
+    'Köri Soslu Tavuklu Penne': 'public/manti.jpeg',
+    'Fettuccine Alfredo': 'public/manti.jpeg',
+    'Kremalı Mantarlı Makarna': 'public/manti.jpeg',
+    'Kaşarlı Tost': 'public/tost.jpeg',
+    'Karışık Tost': 'public/tost.jpeg',
+    'Sucuklu Tost': 'public/tost.jpeg',
+    'Bazlama Tost': 'public/tost.jpeg',
+    'Pesto Soslu Tost': 'public/tost.jpeg'
+  };
+
   const menuEl = document.getElementById('menu-list');
   const aiResults = document.getElementById('aiResults');
   const aiButton = document.getElementById('aiSuggest');
@@ -569,6 +626,15 @@
     items.forEach(item => {
       const card = document.createElement('article');
       card.className = 'menu-card';
+
+      const imgSrc = productImages[item.name];
+      if (imgSrc) {
+        const img = document.createElement('img');
+        img.src = imgSrc;
+        img.alt = `${item.name} görseli`;
+        img.className = 'item-img';
+        card.appendChild(img);
+      }
 
       const title = document.createElement('h4');
       title.textContent = `${item.name} – ${item.price}`;
