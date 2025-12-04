@@ -225,27 +225,13 @@
     padding: 50px 20px;
     text-align: center;
     scroll-margin-top: 90px;
+    position: relative;
+    overflow: hidden;
   }
   .menu h2 {
     font-size: 32px;
     color: #064e3b;
     margin-bottom: 6px;
-  }
-  .menu-filter {
-    display: flex;
-    justify-content: center;
-    margin: 12px 0 20px;
-  }
-  .menu-select {
-    min-width: 200px;
-    padding: 10px 12px;
-    border-radius: 12px;
-    border: 1px solid #d1d5db;
-    font-size: 14px;
-    background: #fff;
-    color: #064e3b;
-    font-weight: 700;
-    box-shadow: 0 8px 18px rgba(0,0,0,0.08);
   }
   .menu p {
     margin: 0 0 18px;
@@ -271,6 +257,16 @@
   .menu-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 14px 28px rgba(0,0,0,0.12);
+  }
+
+  .menu::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: url('logo.png') center/320px no-repeat;
+    opacity: 0.06;
+    pointer-events: none;
+    filter: grayscale(100%);
   }
   .cat-header {
     width: 100%;
@@ -408,11 +404,6 @@
 <div id="menu" class="menu reveal">
   <h2>Menümüz</h2>
   <p>Fiyatlar günceldir, afiyet olsun!</p>
-  <div class="menu-filter">
-    <select id="categoryFilter" class="menu-select" aria-label="Kategori seç">
-      <option value="all">Tüm Kategoriler</option>
-    </select>
-  </div>
   <div id="menu-list"></div>
 </div>
 
@@ -497,7 +488,6 @@
   };
 
   const menuEl = document.getElementById('menu-list');
-  const categorySelect = document.getElementById('categoryFilter');
   const aiResults = document.getElementById('aiResults');
   const aiButton = document.getElementById('aiSuggest');
   const moodButtons = Array.from(document.querySelectorAll('.chip'));
@@ -508,14 +498,6 @@
       categories.set(item.category, []);
     }
     categories.get(item.category).push(item);
-  });
-
-  // Dropdown seçeneklerini ekle
-  Array.from(categories.keys()).forEach(cat => {
-    const opt = document.createElement('option');
-    opt.value = cat;
-    opt.textContent = cat;
-    categorySelect.appendChild(opt);
   });
 
   categories.forEach((items, categoryName) => {
@@ -587,26 +569,6 @@
     header.setAttribute('aria-expanded', String(!isOpen));
     header.classList.toggle('collapsed', isOpen);
     body.style.display = isOpen ? 'none' : 'grid';
-  });
-
-  categorySelect.addEventListener('change', (e) => {
-    const selected = e.target.value;
-    const sections = menuEl.querySelectorAll('section');
-    sections.forEach(sec => {
-      const isMatch = selected === 'all' || sec.dataset.category === selected;
-      sec.style.display = isMatch ? '' : 'none';
-    });
-    if (selected !== 'all') {
-      const target = document.querySelector(`[data-category="${selected}"]`);
-      if (target) {
-        const header = target.querySelector('.cat-header');
-        const body = document.getElementById(header.dataset.target);
-        header.setAttribute('aria-expanded', 'true');
-        header.classList.remove('collapsed');
-        body.style.display = 'grid';
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    }
   });
 
   // AI öneri motoru
