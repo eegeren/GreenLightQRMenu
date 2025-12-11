@@ -356,6 +356,137 @@
     font-size: 14px;
   }
 
+  /* STAFF PANEL (hidden) */
+  .staff-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    z-index: 40;
+    backdrop-filter: blur(4px);
+  }
+  .staff-overlay.open { display: flex; }
+  .staff-card {
+    width: min(980px, 96vw);
+    max-height: 92vh;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 22px 50px rgba(0,0,0,0.18);
+    border: 1px solid #e5e7eb;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    overflow: hidden;
+  }
+  .staff-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .staff-title { font-size: 18px; font-weight: 800; color: #064e3b; }
+  .staff-sub { color: #475569; font-size: 13px; }
+  .ghost-btn {
+    background: transparent;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 8px 10px;
+    cursor: pointer;
+  }
+  .staff-hint { margin: 0; font-size: 13px; color: #475569; }
+  .staff-field {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #d1d5db;
+    font-size: 14px;
+    box-sizing: border-box;
+  }
+  .staff-grid {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  }
+  .staff-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .staff-btn {
+    border: none;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-weight: 800;
+    cursor: pointer;
+  }
+  .staff-full { width: 100%; }
+  .staff-primary { background: #064e3b; color: #fff; }
+  .staff-danger { background: #fee2e2; color: #b91c1c; }
+  .staff-ghost { background: #f1f5f9; color: #0f172a; }
+  .login-error { color: #b91c1c; font-size: 12px; }
+  .staff-table {
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 8px;
+    background: #f8fafc;
+    display: grid;
+    gap: 6px;
+    max-height: 260px;
+    overflow: auto;
+  }
+  .staff-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    background: #fff;
+    cursor: pointer;
+    text-align: left;
+  }
+  .staff-row.active { border-color: #064e3b; background: #ecfdf3; }
+  .staff-row .meta { color: #475569; font-size: 12px; }
+  .staff-status { font-size: 12px; color: #0f172a; }
+  .staff-login {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .staff-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .staff-note {
+    background: #ecfdf3;
+    color: #064e3b;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #d1fae5;
+    font-size: 13px;
+  }
+  .staff-preview {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    color: #475569;
+  }
+  .staff-preview img {
+    width: 72px;
+    height: 72px;
+    border-radius: 10px;
+    object-fit: cover;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+  }
+
   @media (max-width: 640px) {
     .navbar {
       padding: 14px 16px;
@@ -448,13 +579,59 @@
   </p>
 </div>
 
+<!-- STAFF PANEL (hidden entry) -->
+<div id="staffOverlay" class="staff-overlay" aria-hidden="true">
+  <div class="staff-card" role="dialog" aria-modal="true">
+    <div class="staff-header">
+      <div>
+        <div class="staff-title">Çalışan Paneli</div>
+        <div class="staff-sub">Şifre korumalı — menü düzenleme</div>
+      </div>
+      <button id="staffClose" class="ghost-btn" aria-label="Kapat">✕</button>
+    </div>
+
+    <div id="staffLoginView" class="staff-login">
+      <p class="staff-hint">Gizli giriş noktası — şifreyi girin.</p>
+      <input id="staffPassword" type="password" class="staff-field" placeholder="Şifre">
+      <button id="staffLoginBtn" class="ai-btn staff-full">Giriş yap</button>
+      <div id="staffLoginError" class="login-error" hidden>Şifre hatalı, tekrar deneyin.</div>
+    </div>
+
+    <div id="staffPanelView" class="staff-panel" hidden>
+      <div class="staff-note">Bu panel sadece bu cihazda çalışır; tüm değişiklikler tarayıcıda saklanır. Görseller için URL girebilir veya dosya yükleyip kaydedebilirsiniz (yerel depoda tutulur).</div>
+      <div class="staff-grid">
+        <input id="fieldName" class="staff-field" placeholder="Ürün adı">
+        <input id="fieldPrice" class="staff-field" placeholder="Fiyat (örn: 120 ₺)">
+        <input id="fieldCategory" class="staff-field" placeholder="Kategori (örn: Tostlar)">
+        <input id="fieldMoods" class="staff-field" placeholder="Ruh hâli etiketleri (virgülle)">
+        <input id="fieldImage" class="staff-field" placeholder="Görsel yolu/URL veya data (isteğe bağlı)">
+        <input id="fieldImageFile" type="file" accept="image/*" class="staff-field" title="Bilgisayardan resim ekle">
+      </div>
+      <textarea id="fieldDesc" class="staff-field" rows="3" placeholder="Açıklama"></textarea>
+      <div class="staff-preview" id="imagePreview">Görsel seçilmedi.</div>
+
+      <div class="staff-actions">
+        <button id="newItem" class="staff-btn staff-ghost">Yeni kayıt</button>
+        <button id="saveItem" class="staff-btn staff-primary">Kaydet</button>
+        <button id="deleteItem" class="staff-btn staff-danger">Sil</button>
+        <button id="resetMenu" class="staff-btn staff-ghost">Menüyü sıfırla</button>
+      </div>
+      <div class="staff-status" id="staffStatus">Seçili kayıt yok.</div>
+      <div class="staff-table" id="staffTable" role="list"></div>
+    </div>
+  </div>
+</div>
+
 <!-- FOOTER -->
 <div class="footer reveal">
   © 2025 Green Light Coffee — Bandırma
 </div>
 
 <script>
-  const menuData = [
+  const ADMIN_PASSWORD = 'greenlight2025';
+  const STORAGE_KEY = 'gl_menu_data_v1';
+
+  const defaultMenuData = [
     { name: 'Serpme Kahvaltı (2 kişilik)', price: '700 ₺', desc: 'Taze peynir çeşitleri, sekiz çeşit sürülebilir ürünleriyle, yeşillik tabağı, omlet/menemen seçeneği, çıtır patates sosis ve sigara böreği ile sınırsız çayla içiniz ısıtacak bir serpme kahvaltı Green Light ailesinden. AFİYETLE!', moods: ['paylas', 'klasik'], category: 'Kahvaltı' },
     { name: 'Simit Tabağı', price: '110 ₺', desc: 'Sıcacık simit yanında peynir, zeytin, salam taptaze yeşilliklerle güne hafif ama lezzetli bir başlangıç. Bir fincan çay da bizden. AFİYETLE!', moods: ['klasik', 'rahat'], category: 'Kahvaltı' },
     { name: 'Menemen', price: '100 ₺', desc: 'Taze domates ve biber ile yapılmış bol kaşarlı Türk mutfağının vazgeçilmezi. AFİYETLE!', moods: ['enerji', 'klasik'], category: 'Sahanda & Tavada' },
@@ -577,7 +754,7 @@
     'Yaprak Sarma (Haftasonu)': 'iclikoftevesarma.jpeg',
     'San Sebastian': 'sansebastian.jpeg',
     'Fransız Ekler': 'fransizekler.jpeg',
-    'Mantı': 'manti.png',
+    'Mantı': 'manti.jpeg',
     'Kaşarlı Tost': 'tost.jpeg',
     'Karışık Tost': 'tost.jpeg',
     'Sucuklu Tost': 'tost.jpeg',
@@ -589,89 +766,151 @@
   const aiResults = document.getElementById('aiResults');
   const aiButton = document.getElementById('aiSuggest');
   const moodButtons = Array.from(document.querySelectorAll('.chip'));
-  const categories = new Map();
 
-  menuData.forEach(item => {
-    if (!categories.has(item.category)) {
-      categories.set(item.category, []);
+  const staffOverlay = document.getElementById('staffOverlay');
+  const staffLoginView = document.getElementById('staffLoginView');
+  const staffPanelView = document.getElementById('staffPanelView');
+  const staffPassword = document.getElementById('staffPassword');
+  const staffLoginBtn = document.getElementById('staffLoginBtn');
+  const staffLoginError = document.getElementById('staffLoginError');
+  const staffClose = document.getElementById('staffClose');
+  const staffStatus = document.getElementById('staffStatus');
+  const staffTable = document.getElementById('staffTable');
+  const fieldName = document.getElementById('fieldName');
+  const fieldPrice = document.getElementById('fieldPrice');
+  const fieldCategory = document.getElementById('fieldCategory');
+  const fieldMoods = document.getElementById('fieldMoods');
+  const fieldImage = document.getElementById('fieldImage');
+  const fieldImageFile = document.getElementById('fieldImageFile');
+  const fieldDesc = document.getElementById('fieldDesc');
+  const newItemBtn = document.getElementById('newItem');
+  const saveItemBtn = document.getElementById('saveItem');
+  const deleteItemBtn = document.getElementById('deleteItem');
+  const resetMenuBtn = document.getElementById('resetMenu');
+  const imagePreview = document.getElementById('imagePreview');
+
+  let menuData = [];
+  let currentEditIndex = null;
+  let secretTapCount = 0;
+  let secretTimer = null;
+
+  function loadMenuData() {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) {
+          menuData = parsed;
+          return;
+        }
+      }
+    } catch (err) {
+      console.warn('Menü yüklenemedi, varsayılan kullanılıyor', err);
     }
-    categories.get(item.category).push(item);
-  });
+    menuData = [...defaultMenuData];
+  }
 
-  categories.forEach((items, categoryName) => {
-    const section = document.createElement('section');
-    const slug = categoryName.toLowerCase().replace(/\s+/g, '-');
-    section.id = `cat-${slug}`;
-    section.dataset.category = categoryName;
-    section.style.marginBottom = '26px';
+  function persistMenuData() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(menuData));
+    } catch (err) {
+      console.warn('Menü kaydedilemedi', err);
+    }
+  }
 
-    const headerBtn = document.createElement('button');
-    headerBtn.type = 'button';
-    headerBtn.className = 'cat-header';
-    headerBtn.setAttribute('aria-expanded', 'false');
-    headerBtn.classList.add('collapsed');
-    headerBtn.dataset.target = `wrap-${slug}`;
-    headerBtn.innerHTML = `<span>${categoryName}</span><span class="cat-caret">▼</span>`;
-    section.appendChild(headerBtn);
+  function resetMenuData() {
+    if (!confirm('Menüyü fabrika ayarlarına döndürmek istiyor musunuz?')) return;
+    menuData = [...defaultMenuData];
+    currentEditIndex = null;
+    persistMenuData();
+    renderMenu();
+    renderAdminTable();
+    notifyStaff('Menü sıfırlandı.');
+  }
 
-    const wrapper = document.createElement('div');
-    wrapper.className = 'menu-items';
-    wrapper.id = `wrap-${slug}`;
-    wrapper.style.display = 'none';
-
-    items.forEach(item => {
-      const card = document.createElement('article');
-      card.className = 'menu-card';
-
-      const imgFile = productImages[item.name];
-      if (imgFile) {
-        const img = document.createElement('img');
-        img.alt = `${item.name} görseli`;
-        img.className = 'item-img';
-        const candidates = [`public/${imgFile}`, `/${imgFile}`, imgFile];
-        let idx = 0;
-        const tryNext = () => {
-          if (idx >= candidates.length) { img.remove(); return; }
-          img.src = candidates[idx++];
-        };
-        img.onerror = tryNext;
-        tryNext();
-        card.appendChild(img);
-      }
-
-      const title = document.createElement('h4');
-      title.textContent = `${item.name} – ${item.price}`;
-      card.appendChild(title);
-
-      const desc = document.createElement('p');
-      desc.textContent = item.desc;
-      card.appendChild(desc);
-
-      if (item.moods && item.moods.length) {
-        const moods = document.createElement('div');
-        moods.style.display = 'flex';
-        moods.style.gap = '8px';
-        moods.style.flexWrap = 'wrap';
-        item.moods.forEach(mood => {
-          const tag = document.createElement('span');
-          tag.textContent = moodLabels[mood] || mood;
-          tag.style.fontSize = '11px';
-          tag.style.padding = '4px 8px';
-          tag.style.borderRadius = '999px';
-          tag.style.background = 'rgba(6, 78, 59, 0.1)';
-          tag.style.color = '#064e3b';
-          tag.style.fontWeight = '700';
-          moods.appendChild(tag);
-        });
-        card.appendChild(moods);
-      }
-
-      wrapper.appendChild(card);
+  function renderMenu() {
+    menuEl.innerHTML = '';
+    const categories = new Map();
+    menuData.forEach(item => {
+      if (!categories.has(item.category)) categories.set(item.category, []);
+      categories.get(item.category).push(item);
     });
 
-    section.appendChild(wrapper);
-    menuEl.appendChild(section);
-  });
+    categories.forEach((items, categoryName) => {
+      const section = document.createElement('section');
+      const slug = (categoryName || 'kategori').toLowerCase().replace(/\s+/g, '-');
+      section.id = `cat-${slug}`;
+      section.dataset.category = categoryName;
+      section.style.marginBottom = '26px';
+
+      const headerBtn = document.createElement('button');
+      headerBtn.type = 'button';
+      headerBtn.className = 'cat-header';
+      headerBtn.setAttribute('aria-expanded', 'false');
+      headerBtn.classList.add('collapsed');
+      headerBtn.dataset.target = `wrap-${slug}`;
+      headerBtn.innerHTML = `<span>${categoryName}</span><span class="cat-caret">▼</span>`;
+      section.appendChild(headerBtn);
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'menu-items';
+      wrapper.id = `wrap-${slug}`;
+      wrapper.style.display = 'none';
+
+      items.forEach(item => {
+        const card = document.createElement('article');
+        card.className = 'menu-card';
+
+        const imgFile = item.image || productImages[item.name];
+        if (imgFile) {
+          const img = document.createElement('img');
+          img.alt = `${item.name} görseli`;
+          img.className = 'item-img';
+          const candidates = [`public/${imgFile}`, `/${imgFile}`, imgFile];
+          let idx = 0;
+          const tryNext = () => {
+            if (idx >= candidates.length) { img.remove(); return; }
+            img.src = candidates[idx++];
+          };
+          img.onerror = tryNext;
+          tryNext();
+          card.appendChild(img);
+        }
+
+        const title = document.createElement('h4');
+        title.textContent = `${item.name} – ${item.price}`;
+        card.appendChild(title);
+
+        const desc = document.createElement('p');
+        desc.textContent = item.desc || '';
+        card.appendChild(desc);
+
+        if (item.moods && item.moods.length) {
+          const moods = document.createElement('div');
+          moods.style.display = 'flex';
+          moods.style.gap = '8px';
+          moods.style.flexWrap = 'wrap';
+          item.moods.forEach(mood => {
+            const tag = document.createElement('span');
+            tag.textContent = moodLabels[mood] || mood;
+            tag.style.fontSize = '11px';
+            tag.style.padding = '4px 8px';
+            tag.style.borderRadius = '999px';
+            tag.style.background = 'rgba(6, 78, 59, 0.1)';
+            tag.style.color = '#064e3b';
+            tag.style.fontWeight = '700';
+            moods.appendChild(tag);
+          });
+          card.appendChild(moods);
+        }
+
+        wrapper.appendChild(card);
+      });
+
+      section.appendChild(wrapper);
+      menuEl.appendChild(section);
+    });
+  }
 
   menuEl.addEventListener('click', (e) => {
     const header = e.target.closest('.cat-header');
@@ -685,7 +924,6 @@
     body.style.display = isOpen ? 'none' : 'grid';
   });
 
-  // AI öneri motoru
   moodButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       const isSelected = btn.classList.contains('selected');
@@ -719,20 +957,210 @@
 
   function suggest() {
     const selectedMoods = moodButtons.filter(b => b.classList.contains('selected')).map(b => b.dataset.mood);
-    let pool = [];
-    if (selectedMoods.length) {
-      pool = menuData.filter(item => item.moods && item.moods.some(m => selectedMoods.includes(m)));
-    } else {
-      pool = [...menuData];
-    }
-    // shuffle and take 3
+    const pool = selectedMoods.length
+      ? menuData.filter(item => item.moods && item.moods.some(m => selectedMoods.includes(m)))
+      : [...menuData];
     const shuffled = pool.sort(() => Math.random() - 0.5);
     renderSuggestions(shuffled.slice(0, 3));
   }
 
   aiButton.addEventListener('click', suggest);
 
-  // Page reveal on load and force start at top
+  function notifyStaff(message) {
+    staffStatus.textContent = message;
+  }
+
+  function clearForm() {
+    fieldName.value = '';
+    fieldPrice.value = '';
+    fieldCategory.value = '';
+    fieldMoods.value = '';
+    fieldImage.value = '';
+    fieldDesc.value = '';
+    imagePreview.innerHTML = 'Görsel seçilmedi.';
+    currentEditIndex = null;
+    notifyStaff('Seçili kayıt yok.');
+  }
+
+  function fillForm(item) {
+    fieldName.value = item.name || '';
+    fieldPrice.value = item.price || '';
+    fieldCategory.value = item.category || '';
+    fieldMoods.value = (item.moods || []).join(', ');
+    fieldImage.value = item.image || '';
+    fieldDesc.value = item.desc || '';
+    updatePreview(item.image);
+    notifyStaff('Kayıt yüklendi, düzenleyebilirsiniz.');
+  }
+
+  function readForm() {
+    return {
+      name: fieldName.value.trim(),
+      price: fieldPrice.value.trim(),
+      category: fieldCategory.value.trim(),
+      moods: fieldMoods.value.split(',').map(m => m.trim()).filter(Boolean),
+      image: fieldImage.value.trim(),
+      desc: fieldDesc.value.trim()
+    };
+  }
+
+  function updatePreview(src) {
+    if (!src) {
+      imagePreview.innerHTML = 'Görsel seçilmedi.';
+      return;
+    }
+    imagePreview.innerHTML = `<img src="${src}" alt="Önizleme">`;
+  }
+
+  function renderAdminTable() {
+    if (!staffTable) return;
+    if (!menuData.length) {
+      staffTable.innerHTML = '<div>Henüz ürün yok.</div>';
+      return;
+    }
+    staffTable.innerHTML = menuData.map((item, idx) => `
+      <button class="staff-row ${idx === currentEditIndex ? 'active' : ''}" data-index="${idx}" role="listitem">
+        <span>${item.name}</span>
+        <span class="meta">${item.category} · ${item.price}</span>
+      </button>
+    `).join('');
+  }
+
+  staffTable.addEventListener('click', (e) => {
+    const row = e.target.closest('[data-index]');
+    if (!row) return;
+    currentEditIndex = Number(row.dataset.index);
+    fillForm(menuData[currentEditIndex]);
+    renderAdminTable();
+  });
+
+  newItemBtn.addEventListener('click', () => {
+    clearForm();
+    notifyStaff('Yeni kayıt oluşturuluyor.');
+  });
+
+  fieldImage.addEventListener('input', () => updatePreview(fieldImage.value.trim()));
+
+  fieldImageFile.addEventListener('change', (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      fieldImage.value = reader.result || '';
+      updatePreview(fieldImage.value);
+      notifyStaff('Görsel yüklendi, kaydetmeyi unutmayın.');
+    };
+    reader.readAsDataURL(file);
+  });
+
+  saveItemBtn.addEventListener('click', () => {
+    const data = readForm();
+    if (!data.name || !data.category || !data.price) {
+      notifyStaff('Ad, kategori ve fiyat zorunlu.');
+      return;
+    }
+    if (currentEditIndex !== null) {
+      menuData[currentEditIndex] = data;
+    } else {
+      menuData.push(data);
+      currentEditIndex = menuData.length - 1;
+    }
+    persistMenuData();
+    renderMenu();
+    renderAdminTable();
+    notifyStaff('Kaydedildi.');
+  });
+
+  deleteItemBtn.addEventListener('click', () => {
+    if (currentEditIndex === null) {
+      notifyStaff('Silmek için önce bir kayıt seçin.');
+      return;
+    }
+    const removed = menuData.splice(currentEditIndex, 1);
+    currentEditIndex = null;
+    persistMenuData();
+    renderMenu();
+    renderAdminTable();
+    notifyStaff(`${removed[0]?.name || 'Kayıt'} silindi.`);
+    clearForm();
+  });
+
+  resetMenuBtn.addEventListener('click', resetMenuData);
+
+  function openStaffOverlay() {
+    staffOverlay.classList.add('open');
+    staffOverlay.setAttribute('aria-hidden', 'false');
+    staffLoginView.hidden = false;
+    staffPanelView.hidden = true;
+    staffPassword.value = '';
+    staffLoginError.hidden = true;
+    staffPassword.focus();
+  }
+
+  function closeStaffOverlay() {
+    staffOverlay.classList.remove('open');
+    staffOverlay.setAttribute('aria-hidden', 'true');
+    clearForm();
+  }
+
+  function showStaffPanel() {
+    staffLoginView.hidden = true;
+    staffPanelView.hidden = false;
+    renderAdminTable();
+    notifyStaff('Giriş yapıldı. Menüyü düzenleyebilirsiniz.');
+  }
+
+  staffLoginBtn.addEventListener('click', () => {
+    const pass = staffPassword.value.trim();
+    if (pass === ADMIN_PASSWORD) {
+      staffLoginError.hidden = true;
+      showStaffPanel();
+    } else {
+      staffLoginError.hidden = false;
+    }
+  });
+
+  staffPassword.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') staffLoginBtn.click();
+  });
+
+  staffClose.addEventListener('click', closeStaffOverlay);
+  staffOverlay.addEventListener('click', (e) => {
+    if (e.target === staffOverlay) closeStaffOverlay();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && staffOverlay.classList.contains('open')) {
+      closeStaffOverlay();
+    }
+    if (e.ctrlKey && e.altKey && e.key.toLowerCase() === 'g') {
+      openStaffOverlay();
+    }
+  });
+
+  const secretZone = document.querySelector('.brand');
+  if (secretZone) {
+    secretZone.addEventListener('click', (e) => {
+      // Masaüstü: Shift + 4 tık
+      if (e.shiftKey) {
+        secretTapCount += 1;
+      } else {
+        // Mobil/klavyesiz: 6 hızlı tık
+        secretTapCount += 1;
+      }
+      clearTimeout(secretTimer);
+      secretTimer = setTimeout(() => { secretTapCount = 0; }, 2800);
+      if ((e.shiftKey && secretTapCount >= 4) || (!e.shiftKey && secretTapCount >= 6)) {
+        secretTapCount = 0;
+        openStaffOverlay();
+      }
+    });
+  }
+
+  loadMenuData();
+  renderMenu();
+  renderAdminTable();
+
   document.addEventListener('DOMContentLoaded', () => {
     if ('scrollRestoration' in history) {
       history.scrollRestoration = 'manual';
