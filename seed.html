@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Menu Seed</title>
+</head>
+<body>
+
+  <h2>Menüyü Veritabanına Aktar</h2>
+  <button id="seedBtn">MENÜYÜ DB’YE AKTAR</button>
+
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script>
+    const supabase = supabaseJs.createClient(
+      'https://mjtuvepzunqrhefcidzh.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1qdHV2ZXB6dW5xcmhlZmNpZHpoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAwODY3NzEsImV4cCI6MjA4NTY2Mjc3MX0.yzr7r1sfxwinaQ8lzxIETMzi4RYuP5kvXsPXMjlm7H0'
+    );
+
+    const defaultMenuData = [
+      /* BURAYA ESKİ MENÜ ARRAY’İNİ
+         AYNEN YAPIŞTIR
+         TEK BİR KARAKTERİNİ BİLE DEĞİŞTİRME */
+    ];
+
+    document.getElementById('seedBtn').addEventListener('click', async () => {
+      const { error } = await supabase
+        .from('menu_items')
+        .insert(defaultMenuData);
+
+      if (error) {
+        console.error(error);
+        alert('Hata var. Console’a bak.');
+      } else {
+        alert('Menü başarıyla veritabanına aktarıldı.');
+      }
+    });
+  </script>
+
+</body>
+</html>
